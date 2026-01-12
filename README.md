@@ -27,8 +27,6 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 - Required or mandatory courses
 - Recently earned badges
 
----
-
 ### Programs (Course Catalog & Applications)
 - Search and filter courses by category, skill, difficulty, and duration
 - Browse programs and individual courses
@@ -36,14 +34,10 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 - Enroll directly or apply to programs
 - Track application status (Applied, Under Review, Accepted, Rejected)
 
----
-
 ### Learning (Progress Tracking)
 - View enrolled and in-progress courses
 - Track module and course completion
 - Monitor time spent learning
-
----
 
 ### Profile (Achievements & Settings)
 - Personal and educational information
@@ -51,8 +45,6 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 - Achievements, badges, and digital certificates
 - Certificate gallery with sharing and verification
 - Account settings, notification preferences, and privacy controls
-
----
 
 ### Notifications
 - Course reminders and deadlines
