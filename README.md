@@ -1,5 +1,5 @@
 # Team4-Excelerate-Flutter-Project
-
+---
 ## Project Vision
 The Mobile Learning App is designed to provide a modern, mobile-first learning experience that is intuitive, engaging, and goal-driven. The vision is to create a single platform where learners can discover programs, enroll in courses, track their progress, and earn meaningful achievements—all with minimal friction and maximum clarity.
 
