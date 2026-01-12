@@ -1,9 +1,6 @@
 # Team4-Excelerate-Flutter-Project
----
 ## Project Vision
 The Mobile Learning App is designed to provide a modern, mobile-first learning experience that is intuitive, engaging, and goal-driven. The vision is to create a single platform where learners can discover programs, enroll in courses, track their progress, and earn meaningful achievements—all with minimal friction and maximum clarity.
-
----
 
 ## Project Objectives
 The key objectives of this project are to:
@@ -13,8 +10,6 @@ The key objectives of this project are to:
 - Increase engagement through visual progress indicators, streaks, and achievements
 - Support certifications and skill validation through digital credentials
 - Provide a scalable foundation for future enhancements such as analytics and personalization
-
----
 
 ## App Navigation Flow
 The application uses a tab-based navigation structure optimized for mobile usability. Each tab has a clearly defined purpose within the learning journey.
