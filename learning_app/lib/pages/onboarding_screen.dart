@@ -3,6 +3,9 @@
 
 // Package imports
 import 'package:flutter/material.dart';
+import 'package:learning_app/utils/intro_screens/intro_page_1.dart';
+import 'package:learning_app/utils/intro_screens/intro_page_2.dart';
+import 'package:learning_app/utils/intro_screens/intro_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 /// Onboarding screen widget
@@ -27,9 +30,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _controller,
             children: [
               // Individual onboarding pages
-              _buildPage(Colors.amber, "Welcome"), // Welcome
-              _buildPage(Colors.blue, "Features"), // Features
-              _buildPage(Colors.green, "Get Started"), // Final CTA screen
+              IntroPage1(),
+              IntroPage2(),
+              IntroPage3(),
             ],
           ),
 
@@ -54,23 +57,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  /// Helper method for creating consistent page layouts
-  Widget _buildPage(Color color, String text) {
-    return Container(
-      color: color,
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 32,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
     );
   }
