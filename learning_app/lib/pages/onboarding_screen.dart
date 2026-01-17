@@ -132,10 +132,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
                         );
                       },
-                      child: Text('get started'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade100,
+                        foregroundColor: Colors.blue.shade700,
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 15,
+                        ),
+                      ),
+                      child: const Text(
+                        'Get Started',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ],
