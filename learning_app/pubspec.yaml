@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   smooth_page_indicator: ^2.0.1
   lottie: ^3.3.2
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ flutter:
     - assets/lottie/student.json
     - assets/lottie/search.json
     - assets/lottie/developer.json
+    - assets/logos/splash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -89,3 +91,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_native_splash:
+  color: "#144bd9"
+  image: assets/logos/splash.png
+  fullscreen: true # default false
+
+  android_12:
+    color: "#144bd9"
+
+    image: assets/logos/splash.png
+    icon_background_color: "#111111"
