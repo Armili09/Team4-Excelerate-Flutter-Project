@@ -78,7 +78,7 @@ class CourseCard extends StatelessWidget {
       height: 100, // same height
       width: double.infinity, // <-- make the card stretch full width
       child: Card(
-        color: const Color(0xFF11283E),
+        color: const Color(0xFF1A3750),
         margin: const EdgeInsets.only(bottom: 12),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),

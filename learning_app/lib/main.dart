@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'screens/home_screen.dart';
 import 'screens/programs_screen.dart';
 import 'screens/my_courses_screen.dart';
@@ -30,54 +29,35 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const Color primaryColor = Color(0xFF1C64F2);
-  static const Color backgroundColor = Color(0xFF0C1C2B);
-  static const Color cardColor = Color(0xFF11283E);
-
   @override
   Widget build(BuildContext context) {
+    const primaryColor = Color(0xFF1C64F2);
+    const backgroundColor = Color(0xFF1F2A44);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Learning App',
       theme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,
-
-        // Global background
         scaffoldBackgroundColor: backgroundColor,
-
-        // Color scheme
-        colorScheme: const ColorScheme.dark(
+        colorScheme: ColorScheme.dark(
           primary: primaryColor,
           onPrimary: Colors.white,
           background: backgroundColor,
-          surface: cardColor,
+          surface: Color(0xFF2A3A60),
           onSurface: Colors.white,
-          secondary: Color(0xFFFFE973),
+          secondary: Colors.yellow.shade700,
         ),
-
-        // Card styling (FIXED)
-        cardTheme: const CardThemeData(
-          color: cardColor,
-          elevation: 3,
-          shadowColor: Colors.black54,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-        ),
-
-        // AppBar
         appBarTheme: const AppBarTheme(
-          backgroundColor: backgroundColor,
+          backgroundColor: Color(0xFF1F2A44),
           centerTitle: true,
           elevation: 2,
         ),
-
-        // Bottom navigation
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: backgroundColor,
-          selectedItemColor: primaryColor,
-          unselectedItemColor: Colors.white60,
+          backgroundColor: Color(0xFF1F2A44),
+          selectedItemColor: Color(0xFF1C64F2),
+          unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
         ),
