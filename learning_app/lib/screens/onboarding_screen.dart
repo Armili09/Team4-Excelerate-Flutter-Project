@@ -7,7 +7,7 @@ import 'package:learning_app/utils/intro_screens/intro_page_1.dart';
 import 'package:learning_app/utils/intro_screens/intro_page_2.dart';
 import 'package:learning_app/utils/intro_screens/intro_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:learning_app/pages/home_page.dart';
+import 'package:learning_app/screens/home_page.dart';
 
 /// Onboarding screen widget
 class OnboardingScreen extends StatefulWidget {
