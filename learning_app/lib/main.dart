@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'screens/home_screen.dart';
-import 'screens/programs_screen.dart';
-import 'screens/my_courses_screen.dart';
-import 'screens/profile_screen.dart';
-import 'utils/user_profile.dart';
-
+/// Main entry point for the Learning App
+/// 
+/// Initializes the application with:
+/// - Provider state management for user profile
+/// - Dark theme configuration
+/// - Onboarding/main navigation flow
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -26,11 +24,36 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+/// Root application widget managing:
+/// - Theme configuration
+/// - Onboarding completion state
+/// - Navigation flow control
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+/// State management for application-level features
+class _MyAppState extends State<MyApp> {
+  /// Tracks whether user has completed onboarding
+  /// 
+  /// Defaults to `false` (show onboarding first)
+  bool _onboardingCompleted = false;
+
+  /// Callback to mark onboarding as completed
+  /// 
+  /// Triggers navigation to main app interface
+  void _completeOnboarding() {
+    setState(() {
+      _onboardingCompleted = true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Theme color constants
     const primaryColor = Color(0xFF1C64F2);
     const backgroundColor = Color(0xFF1F2A44);
 
@@ -45,7 +68,7 @@ class MyApp extends StatelessWidget {
           primary: primaryColor,
           onPrimary: Colors.white,
           background: backgroundColor,
-          surface: Color(0xFF2A3A60),
+          surface: const Color(0xFF2A3A60),
           onSurface: Colors.white,
           secondary: Colors.yellow.shade700,
         ),
@@ -62,11 +85,24 @@ class MyApp extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
         ),
       ),
-      home: const MainNavigation(),
+      /// Determines initial screen based on onboarding state
+      /// 
+      /// - Shows [OnboardingScreen] if not completed
+      /// - Navigates to [MainNavigation] when completed
+      home: _onboardingCompleted
+          ? const MainNavigation()
+          : OnboardingScreen(onComplete: _completeOnboarding),
     );
   }
 }
 
+/// Primary navigation structure with bottom bar
+/// 
+/// Contains four main screens:
+/// 1. Home
+/// 2. Programs
+/// 3. My Courses
+/// 4. Profile
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
 
@@ -74,33 +110,4 @@ class MainNavigation extends StatefulWidget {
   State<MainNavigation> createState() => _MainNavigationState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    ProgramsScreen(),
-    MyCoursesScreen(),
-    ProfileScreen(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Programs'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
-            label: 'Learning',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
-    );
-  }
-}
+/// Manages navigation state between app sections
