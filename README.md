@@ -14,6 +14,13 @@ The key objectives of this project are to:
 ## App Navigation Flow
 The application uses a tab-based navigation structure optimized for mobile usability. Each tab has a clearly defined purpose within the learning journey.
 
+### Onboarding and Spash Screen:
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bc29f2d0-62bd-40dc-8a49-9256c1a2dee2" width="250" />
+  <img src="https://github.com/user-attachments/assets/85802704-158e-4f53-9d4c-0529ae4b4c38" width="250" />
+  <img src="https://github.com/user-attachments/assets/aba49112-baf4-4ea6-8d85-3a416c0e7d41" width="250" />
+</p>
+
 ### Home (Dashboard)
 - Welcome header
 - Continue Learning section (last accessed courses)
@@ -29,17 +36,17 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 - Enroll directly or apply to programs
 - Track application status (Applied, Under Review, Accepted, Rejected)
 
-### Learning (Progress Tracking)
-- View enrolled and in-progress courses
-- Track module and course completion
-- Monitor time spent learning
+### My Courses Page
+  <img width="2559" height="1599" alt="MyCourses" src="https://github.com/user-attachments/assets/7008ce31-1346-44c1-9126-9704f709f699" />
 
-### Profile (Achievements & Settings)
-- Personal and educational information
-- Completed courses and learning history
-- Achievements, badges, and digital certificates
-- Certificate gallery with sharing and verification
-- Account settings, notification preferences, and privacy controls
+### Profile Page
+<img width="2559" height="1599" alt="Profile" src="https://github.com/user-attachments/assets/cf503c51-df79-4219-8884-1b09586449dc" />
+
+### Profile Page Functionalities: 
+<p align="center">
+  <img alt="Edit_Profile" src="https://github.com/user-attachments/assets/c6227cb8-42c0-4133-afeb-2a7081e7399b" width="500" />
+  <img alt="Logout" src="https://github.com/user-attachments/assets/d4d81017-c68a-4bf9-9a74-8141b14a6f0f" width="500" />
+</p>
 
 ### Notifications
 - Course reminders and deadlines
