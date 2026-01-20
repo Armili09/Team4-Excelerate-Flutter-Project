@@ -21,20 +21,13 @@ The application uses a tab-based navigation structure optimized for mobile usabi
   <img src="https://github.com/user-attachments/assets/aba49112-baf4-4ea6-8d85-3a416c0e7d41" width="250" />
 </p>
 
-### Home (Dashboard)
-- Welcome header
-- Continue Learning section (last accessed courses)
-- Progress bars for active courses
-- Quick stats (courses completed, hours logged, learning streak)
-- Required or mandatory courses
-- Recently earned badges
-
-### Programs (Course Catalog & Applications)
-- Search and filter courses by category, skill, difficulty, and duration
-- Browse programs and individual courses
-- View course or program details
-- Enroll directly or apply to programs
-- Track application status (Applied, Under Review, Accepted, Rejected)
+### Login Page
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/cb4752ba-626a-4119-9d2d-139ee2937442" alt="Login 1" width="200" />
+  <img src="https://github.com/user-attachments/assets/c5878c99-92e6-4ae4-a681-a57a511301f6" alt="Login 2" width="200" />
+  <img src="https://github.com/user-attachments/assets/a937cca2-2e28-437f-ac69-4923a4b5c1d7" alt="Login 3" width="200" />
+  <img src="https://github.com/user-attachments/assets/32e83cd2-b245-42b4-8550-3a75a51de067" alt="Login 4" width="200" />
+</p>
 
 ### My Courses Page
   <img width="2559" height="1599" alt="MyCourses" src="https://github.com/user-attachments/assets/7008ce31-1346-44c1-9126-9704f709f699" />
@@ -47,12 +40,3 @@ The application uses a tab-based navigation structure optimized for mobile usabi
   <img alt="Edit_Profile" src="https://github.com/user-attachments/assets/c6227cb8-42c0-4133-afeb-2a7081e7399b" width="500" />
   <img alt="Logout" src="https://github.com/user-attachments/assets/d4d81017-c68a-4bf9-9a74-8141b14a6f0f" width="500" />
 </p>
-
-### Notifications
-- Course reminders and deadlines
-- Application status updates
-- New content and announcements
-- Achievement alerts
-
-Users can customize notification preferences, including quiet hours and snooze options in settings.
-
