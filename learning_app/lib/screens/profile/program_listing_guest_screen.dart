@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../utils/models/program.dart';
 import '../../utils/program_card.dart';
-import '../../utils/search_filter_bar.dart';
 
 class ProgramListingGuestScreen extends StatefulWidget {
   const ProgramListingGuestScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProgramListingGuestScreen> createState() => _ProgramListingGuestScreenState();
+  State<ProgramListingGuestScreen> createState() =>
+      _ProgramListingGuestScreenState();
 }
 
 class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
@@ -23,18 +23,24 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
     'Design',
     'Marketing',
     'Data Science',
-    'Development'
+    'Development',
   ];
 
-  final List<String> _difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+  final List<String> _difficulties = [
+    'All',
+    'Beginner',
+    'Intermediate',
+    'Advanced',
+  ];
   final List<String> _sortOptions = ['Popular', 'Newest', 'Rating', 'Duration'];
 
   // Mock data - Replace with actual API call
-  List<Program> _allPrograms = [
+  final List<Program> _allPrograms = [
     Program(
       id: '1',
       title: 'Full Stack Web Development',
-      description: 'Master both frontend and backend development with modern technologies',
+      description:
+          'Master both frontend and backend development with modern technologies',
       category: 'Development',
       difficulty: 'Intermediate',
       durationInWeeks: 24,
@@ -48,7 +54,8 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
     Program(
       id: '2',
       title: 'Data Science Fundamentals',
-      description: 'Learn data analysis, visualization, and machine learning basics',
+      description:
+          'Learn data analysis, visualization, and machine learning basics',
       category: 'Data Science',
       difficulty: 'Beginner',
       durationInWeeks: 16,
@@ -62,7 +69,8 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
     Program(
       id: '3',
       title: 'UX/UI Design Masterclass',
-      description: 'Create beautiful and user-friendly interfaces with industry-standard tools',
+      description:
+          'Create beautiful and user-friendly interfaces with industry-standard tools',
       category: 'Design',
       difficulty: 'Intermediate',
       durationInWeeks: 12,
@@ -76,7 +84,8 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
     Program(
       id: '4',
       title: 'Digital Marketing Strategy',
-      description: 'Build comprehensive marketing campaigns across all digital channels',
+      description:
+          'Build comprehensive marketing campaigns across all digital channels',
       category: 'Marketing',
       difficulty: 'Beginner',
       durationInWeeks: 8,
@@ -111,18 +120,24 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
       programs = programs.where((p) {
         return p.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
             p.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-            p.skills.any((s) => s.toLowerCase().contains(_searchQuery.toLowerCase()));
+            p.skills.any(
+              (s) => s.toLowerCase().contains(_searchQuery.toLowerCase()),
+            );
       }).toList();
     }
 
     // Filter by category
     if (_selectedCategory != 'All') {
-      programs = programs.where((p) => p.category == _selectedCategory).toList();
+      programs = programs
+          .where((p) => p.category == _selectedCategory)
+          .toList();
     }
 
     // Filter by difficulty
     if (_selectedDifficulty != 'All') {
-      programs = programs.where((p) => p.difficulty == _selectedDifficulty).toList();
+      programs = programs
+          .where((p) => p.difficulty == _selectedDifficulty)
+          .toList();
     }
 
     // Sort programs
@@ -155,10 +170,7 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
         backgroundColor: Colors.white,
         title: const Text(
           'Browse Programs',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -194,7 +206,10 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -243,7 +258,9 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
                     color: Colors.black87,
                   ),
                 ),
-                if (_searchQuery.isNotEmpty || _selectedCategory != 'All' || _selectedDifficulty != 'All')
+                if (_searchQuery.isNotEmpty ||
+                    _selectedCategory != 'All' ||
+                    _selectedDifficulty != 'All')
                   TextButton.icon(
                     onPressed: () {
                       setState(() {
@@ -270,7 +287,10 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
                         padding: const EdgeInsets.only(bottom: 16),
                         child: ProgramCard(
                           program: filteredPrograms[index],
-                          onTap: () => _showProgramDetails(context, filteredPrograms[index]),
+                          onTap: () => _showProgramDetails(
+                            context,
+                            filteredPrograms[index],
+                          ),
                           showGuestPrompt: true,
                         ),
                       );
@@ -309,10 +329,7 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
         label: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '$label: $currentValue',
-              style: const TextStyle(fontSize: 13),
-            ),
+            Text('$label: $currentValue', style: const TextStyle(fontSize: 13)),
             const SizedBox(width: 4),
             const Icon(Icons.arrow_drop_down, size: 18),
           ],
@@ -389,9 +406,15 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      _buildInfoChip(Icons.signal_cellular_alt, program.difficulty),
+                      _buildInfoChip(
+                        Icons.signal_cellular_alt,
+                        program.difficulty,
+                      ),
                       const SizedBox(width: 8),
-                      _buildInfoChip(Icons.schedule, '${program.durationInWeeks} weeks'),
+                      _buildInfoChip(
+                        Icons.schedule,
+                        '${program.durationInWeeks} weeks',
+                      ),
                       const SizedBox(width: 8),
                       _buildInfoChip(Icons.people, '${program.enrolledCount}+'),
                     ],
@@ -449,8 +472,13 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
                         ),
                       ),
                       child: Text(
-                        program.requiresApplication ? 'Sign In to Apply' : 'Sign In to Enroll',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        program.requiresApplication
+                            ? 'Sign In to Apply'
+                            : 'Sign In to Enroll',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -475,10 +503,7 @@ class _ProgramListingGuestScreenState extends State<ProgramListingGuestScreen> {
         children: [
           Icon(icon, size: 16, color: Colors.grey[700]),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(fontSize: 13, color: Colors.grey[700]),
-          ),
+          Text(label, style: TextStyle(fontSize: 13, color: Colors.grey[700])),
         ],
       ),
     );

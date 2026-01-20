@@ -43,7 +43,8 @@ class Program {
       rating: (json['rating'] ?? 0).toDouble(),
       requiresApplication: json['requiresApplication'] ?? false,
       applicationStatus: json['applicationStatus'],
-      courses: (json['courses'] as List<dynamic>?)
+      courses:
+          (json['courses'] as List<dynamic>?)
               ?.map((c) => Course.fromJson(c))
               .toList() ??
           [],
@@ -76,6 +77,7 @@ class Course {
   final int durationInHours;
   final String instructor;
   final String? programId;
+  final int moduleCount;
 
   Course({
     required this.id,
@@ -84,6 +86,7 @@ class Course {
     required this.durationInHours,
     required this.instructor,
     this.programId,
+    this.moduleCount = 0,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) {
@@ -94,6 +97,7 @@ class Course {
       durationInHours: json['durationInHours'] ?? 0,
       instructor: json['instructor'] ?? '',
       programId: json['programId'],
+      moduleCount: json['moduleCount'] ?? 0,
     );
   }
 
@@ -105,6 +109,7 @@ class Course {
       'durationInHours': durationInHours,
       'instructor': instructor,
       'programId': programId,
+      'moduleCount': moduleCount,
     };
   }
 }

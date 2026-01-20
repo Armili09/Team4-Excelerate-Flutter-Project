@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/program.dart';
+import 'models/program.dart';
 
 class ProgramCard extends StatelessWidget {
   final Program program;
@@ -37,7 +37,9 @@ class ProgramCard extends StatelessWidget {
               height: 160,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
                 image: program.imageUrl.isNotEmpty
                     ? DecorationImage(
                         image: NetworkImage(program.imageUrl),
@@ -52,7 +54,10 @@ class ProgramCard extends StatelessWidget {
                     top: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -73,7 +78,10 @@ class ProgramCard extends StatelessWidget {
                       top: 12,
                       right: 12,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.orange,
                           borderRadius: BorderRadius.circular(20),
@@ -122,11 +130,20 @@ class ProgramCard extends StatelessWidget {
                   // Stats Row
                   Row(
                     children: [
-                      _buildStatChip(Icons.signal_cellular_alt, program.difficulty),
+                      _buildStatChip(
+                        Icons.signal_cellular_alt,
+                        program.difficulty,
+                      ),
                       const SizedBox(width: 8),
-                      _buildStatChip(Icons.schedule, '${program.durationInWeeks}w'),
+                      _buildStatChip(
+                        Icons.schedule,
+                        '${program.durationInWeeks}w',
+                      ),
                       const SizedBox(width: 8),
-                      _buildStatChip(Icons.people_outline, '${program.enrolledCount}+'),
+                      _buildStatChip(
+                        Icons.people_outline,
+                        '${program.enrolledCount}+',
+                      ),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -172,13 +189,7 @@ class ProgramCard extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: Colors.grey[700]),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[700],
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[700])),
         ],
       ),
     );
