@@ -22,6 +22,9 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 </p>
 
 ### Login Page
+Login screen as the primary entry point for users, ensuring it includes form inputs for authentication and basic validation to simulate a secure login process, with navigation to the Dashboard upon successful mock login. 
+UI layout with email and password fields, including a 'Remember Me' checkbox and 'Forgot Password' link. 
+Form validation to check for empty fields or invalid formats,
 <p align="center">
   <img src="https://github.com/user-attachments/assets/cb4752ba-626a-4119-9d2d-139ee2937442" alt="Login 1" width="200" />
   <img src="https://github.com/user-attachments/assets/c5878c99-92e6-4ae4-a681-a57a511301f6" alt="Login 2" width="200" />
@@ -30,13 +33,22 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 </p>
 
 ### My Courses Page
-  <img width="2559" height="1599" alt="MyCourses" src="https://github.com/user-attachments/assets/7008ce31-1346-44c1-9126-9704f709f699" />
+My Courses screen to list enrolled courses with progress indicators, allowing users to track their learning journey and resume from details. Sections for in-progress, saved and completed courses have also been added.
+ <p align="center"> 
+  <img alt="MC" src="https://github.com/user-attachments/assets/7f6a118f-a262-4847-be09-33c277e8b7c5" width="250" />
+ </p>
 
 ### Profile Page
-<img width="2559" height="1599" alt="Profile" src="https://github.com/user-attachments/assets/cf503c51-df79-4219-8884-1b09586449dc" />
+Profile screen as a user overview, showing personal info, stats, and links to related features like editing or achievements and also settings.
+<p align="center">
+  <img alt="P1" src="https://github.com/user-attachments/assets/281018f8-c0cf-4b80-a588-f6b0a9552c83" width="250" />
+</p>
 
 ### Profile Page Functionalities: 
+Edit Profile Button Functionality 
+Logout button with confirmation dialog
 <p align="center">
-  <img alt="Edit_Profile" src="https://github.com/user-attachments/assets/c6227cb8-42c0-4133-afeb-2a7081e7399b" width="500" />
-  <img alt="Logout" src="https://github.com/user-attachments/assets/d4d81017-c68a-4bf9-9a74-8141b14a6f0f" width="500" />
+  <img alt="P4" src="https://github.com/user-attachments/assets/59560c5c-6a2d-41f0-a4a3-97b939bdb19f" WIDTH="250" />
+  <img alt="P2" src="https://github.com/user-attachments/assets/b8a4a026-1ae6-4908-92a0-5e76358e2cb6" width="250" />
+  <img alt="P3" src="https://github.com/user-attachments/assets/5f8e301e-f744-4862-b6ba-eb9d5e099aa3" width="250" />
 </p>
