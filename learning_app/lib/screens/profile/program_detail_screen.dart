@@ -36,10 +36,7 @@ class ProgramDetailScreen extends StatelessWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    program.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
+                  Image.network(program.imageUrl, fit: BoxFit.cover),
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -73,14 +70,11 @@ class ProgramDetailScreen extends StatelessWidget {
                             '${program.enrolledCount} enrolled',
                           ),
                           const SizedBox(width: 8),
-                          _buildStatChip(
-                            Icons.star,
-                            '${program.rating}',
-                          ),
+                          _buildStatChip(Icons.star, '${program.rating}'),
                           const SizedBox(width: 8),
                           _buildStatChip(
                             Icons.schedule,
-                            program.duration,
+                            '${program.durationInWeeks} weeks',
                           ),
                         ],
                       ),
@@ -136,14 +130,16 @@ class ProgramDetailScreen extends StatelessWidget {
                         spacing: 8,
                         runSpacing: 8,
                         children: program.skills
-                            .map((skill) => Chip(
-                                  label: Text(skill),
-                                  backgroundColor: Colors.deepPurple[50],
-                                  labelStyle: const TextStyle(
-                                    color: Colors.deepPurple,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ))
+                            .map(
+                              (skill) => Chip(
+                                label: Text(skill),
+                                backgroundColor: Colors.deepPurple[50],
+                                labelStyle: const TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
                             .toList(),
                       ),
                       if (program.courses.isNotEmpty) ...[
@@ -156,7 +152,9 @@ class ProgramDetailScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        ...program.courses.map((course) => _buildCourseItem(course)),
+                        ...program.courses.map(
+                          (course) => _buildCourseItem(course),
+                        ),
                       ],
                     ],
                   ),
@@ -287,18 +285,12 @@ class ProgramDetailScreen extends StatelessWidget {
         children: [
           Text(
             course.title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Text(
             course.description,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
           ),
           const SizedBox(height: 8),
           Row(
@@ -313,7 +305,7 @@ class ProgramDetailScreen extends StatelessWidget {
               Icon(Icons.schedule, size: 14, color: Colors.grey[600]),
               const SizedBox(width: 4),
               Text(
-                course.duration,
+                '${course.durationInHours} hours',
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],

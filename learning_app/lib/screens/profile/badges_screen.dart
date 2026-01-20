@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../models/badge.dart';
+import '../../utils/models/badge.dart' as custom_badge;
 
 class BadgesScreen extends StatefulWidget {
   const BadgesScreen({Key? key}) : super(key: key);
@@ -9,7 +9,8 @@ class BadgesScreen extends StatefulWidget {
   State<BadgesScreen> createState() => _BadgesScreenState();
 }
 
-class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderStateMixin {
+class _BadgesScreenState extends State<BadgesScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String _selectedCategory = 'All';
 
@@ -19,12 +20,12 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
     'Milestone',
     'Skill',
     'Streak',
-    'Special'
+    'Special',
   ];
 
   // Mock data - Replace with actual API call
-  final List<Badge> _earnedBadges = [
-    Badge(
+  final List<custom_badge.Badge> _earnedBadges = [
+    custom_badge.Badge(
       id: '1',
       title: 'Early Bird',
       description: 'Completed first course within 2 weeks',
@@ -35,7 +36,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       pointsEarned: 50,
       relatedCourse: 'Introduction to Programming',
     ),
-    Badge(
+    custom_badge.Badge(
       id: '2',
       title: 'Week Warrior',
       description: 'Maintained a 7-day learning streak',
@@ -45,7 +46,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       rarity: 'Common',
       pointsEarned: 25,
     ),
-    Badge(
+    custom_badge.Badge(
       id: '3',
       title: 'Course Crusher',
       description: 'Completed 5 courses',
@@ -55,7 +56,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       rarity: 'Epic',
       pointsEarned: 100,
     ),
-    Badge(
+    custom_badge.Badge(
       id: '4',
       title: 'JavaScript Master',
       description: 'Mastered JavaScript fundamentals',
@@ -66,7 +67,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       pointsEarned: 75,
       relatedCourse: 'Advanced JavaScript',
     ),
-    Badge(
+    custom_badge.Badge(
       id: '5',
       title: 'Perfect Score',
       description: 'Scored 100% on a course assessment',
@@ -77,7 +78,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       pointsEarned: 150,
       relatedCourse: 'Web Development Basics',
     ),
-    Badge(
+    custom_badge.Badge(
       id: '6',
       title: 'Social Learner',
       description: 'Participated in 10 discussion forums',
@@ -89,8 +90,8 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
     ),
   ];
 
-  final List<Badge> _lockedBadges = [
-    Badge(
+  final List<custom_badge.Badge> _lockedBadges = [
+    custom_badge.Badge(
       id: '7',
       title: 'Marathon Runner',
       description: 'Maintain a 30-day learning streak',
@@ -100,7 +101,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       rarity: 'Epic',
       pointsEarned: 200,
     ),
-    Badge(
+    custom_badge.Badge(
       id: '8',
       title: 'Python Expert',
       description: 'Complete all Python courses',
@@ -110,7 +111,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
       rarity: 'Legendary',
       pointsEarned: 250,
     ),
-    Badge(
+    custom_badge.Badge(
       id: '9',
       title: 'Community Champion',
       description: 'Help 50 other learners in forums',
@@ -134,19 +135,22 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
-  List<Badge> get _filteredEarnedBadges {
+  List<custom_badge.Badge> get _filteredEarnedBadges {
     if (_selectedCategory == 'All') return _earnedBadges;
     return _earnedBadges.where((b) => b.category == _selectedCategory).toList();
   }
 
-  List<Badge> get _filteredLockedBadges {
+  List<custom_badge.Badge> get _filteredLockedBadges {
     if (_selectedCategory == 'All') return _lockedBadges;
     return _lockedBadges.where((b) => b.category == _selectedCategory).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final totalPoints = _earnedBadges.fold<int>(0, (sum, badge) => sum + badge.pointsEarned);
+    final totalPoints = _earnedBadges.fold<int>(
+      0,
+      (sum, badge) => sum + badge.pointsEarned,
+    );
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -174,11 +178,19 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildStatItem('Earned', '${_earnedBadges.length}', Icons.emoji_events),
+                    _buildStatItem(
+                      'Earned',
+                      '${_earnedBadges.length}',
+                      Icons.emoji_events,
+                    ),
                     Container(width: 1, height: 40, color: Colors.white30),
                     _buildStatItem('Points', '$totalPoints', Icons.stars),
                     Container(width: 1, height: 40, color: Colors.white30),
-                    _buildStatItem('Locked', '${_lockedBadges.length}', Icons.lock),
+                    _buildStatItem(
+                      'Locked',
+                      '${_lockedBadges.length}',
+                      Icons.lock,
+                    ),
                   ],
                 ),
               ),
@@ -223,7 +235,9 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
                     selectedColor: Colors.blue[100],
                     labelStyle: TextStyle(
                       color: isSelected ? Colors.blue[900] : Colors.grey[700],
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                   ),
                 );
@@ -260,16 +274,16 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
         ),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
         ),
       ],
     );
   }
 
-  Widget _buildBadgeGrid(List<Badge> badges, {required bool isEarned}) {
+  Widget _buildBadgeGrid(
+    List<custom_badge.Badge> badges, {
+    required bool isEarned,
+  }) {
     if (badges.isEmpty) {
       return Center(
         child: Column(
@@ -282,7 +296,9 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
             ),
             const SizedBox(height: 16),
             Text(
-              isEarned ? 'No badges earned yet' : 'No locked badges in this category',
+              isEarned
+                  ? 'No badges earned yet'
+                  : 'No locked badges in this category',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[600],
@@ -316,7 +332,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
     );
   }
 
-  Widget _buildBadgeCard(Badge badge, {required bool isEarned}) {
+  Widget _buildBadgeCard(custom_badge.Badge badge, {required bool isEarned}) {
     return GestureDetector(
       onTap: () => _showBadgeDetails(badge, isEarned),
       child: Container(
@@ -455,7 +471,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
     }
   }
 
-  void _showBadgeDetails(Badge badge, bool isEarned) {
+  void _showBadgeDetails(custom_badge.Badge badge, bool isEarned) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -496,10 +512,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
             // Badge Title
             Text(
               badge.title,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -557,13 +570,14 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Points',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
+                      Text('Points', style: TextStyle(color: Colors.grey[600])),
                       Row(
                         children: [
-                          const Icon(Icons.stars, size: 16, color: Colors.amber),
+                          const Icon(
+                            Icons.stars,
+                            size: 16,
+                            color: Colors.amber,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${badge.pointsEarned}',
@@ -626,10 +640,7 @@ class _BadgesScreenState extends State<BadgesScreen> with SingleTickerProviderSt
                     Expanded(
                       child: Text(
                         'Complete the requirements to unlock this badge',
-                        style: TextStyle(
-                          color: Colors.blue[900],
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: Colors.blue[900], fontSize: 13),
                       ),
                     ),
                   ],

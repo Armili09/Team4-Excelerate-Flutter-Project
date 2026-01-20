@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '/utils/models/user_profile.dart';
-import 'pages/certificates_screen.dart';
-import 'pages/edit_profile_screen.dart';
-import 'pages/profile/badges_screen.dart';
-import 'pages/profile/program_listing_guest_screen.dart';
+import 'screens/profile/certificates_screen.dart';
+import 'screens/profile/edit_profile_screen.dart';
+import 'screens/profile/badges_screen.dart';
+import 'screens/profile/program_listing_guest_screen.dart';
 
 void main() {
   runApp(const ExcelerateApp());
@@ -42,7 +42,7 @@ class ExcelerateApp extends StatelessWidget {
             ),
           ),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -97,10 +97,7 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
         children: [
           const Text(
             'Feature Demos',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           const Text(
@@ -137,9 +134,7 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const BadgesScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const BadgesScreen()),
               );
             },
           ),
@@ -174,7 +169,8 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditProfileScreen(profile: _demoProfile),
+                  builder: (context) =>
+                      EditProfileScreen(profile: _demoProfile),
                 ),
               );
             },
@@ -233,10 +229,7 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],
               ),
