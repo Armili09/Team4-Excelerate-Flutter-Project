@@ -39,6 +39,18 @@ dependencies:
   lottie: ^3.3.2
   flutter_native_splash: ^2.4.7
 
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  intl: ^0.18.1
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.0
+  shimmer: ^3.0.0
+  share_plus: ^7.2.1
+  url_launcher: ^6.2.2
+  image_picker: ^1.0.5
+  fl_chart: ^0.65.0
+  badges: ^3.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -60,8 +72,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to the application:
+  # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/
+    - assets/icons/
     - assets/lottie/student.json
     - assets/lottie/search.json
     - assets/lottie/developer.json
