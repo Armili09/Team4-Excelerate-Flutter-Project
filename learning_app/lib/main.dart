@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:learning_app/features/dashboard/dashboard_page.dart';
-import 'features/login/login_page.dart';
-import '/utils/models/user_profile.dart';
-import 'screens/profile/certificates_screen.dart';
-import 'screens/profile/edit_profile_screen.dart';
-import 'screens/profile/badges_screen.dart';
-import 'screens/profile/program_listing_guest_screen.dart';
+import 'screens/dashboard/dashboard_screen.dart';
+import 'screens/onboarding_screen.dart';
+import 'providers/user_profile_provider.dart';
+import 'utils/models/user_profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,26 +13,31 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  // Initialize any required services here
+  // For example: AuthService.initialize();
+
   runApp(
     ChangeNotifierProvider(
-      create: (_) => UserProfile(
-        id: 'demo_user_1',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        phoneNumber: '+1234567890',
-        bio: 'Passionate learner exploring technology and data science',
-        location: 'San Francisco, CA',
-        occupation: 'Software Developer',
-        organization: 'Tech Company Inc.',
-        interests: ['Technology', 'Data Science', 'AI & Machine Learning'],
-        skills: ['JavaScript', 'Python', 'React', 'Flutter'],
-        educationLevel: EducationLevel.bachelor,
-        linkedInUrl: 'https://linkedin.com/in/johndoe',
-        githubUrl: 'https://github.com/johndoe',
-        isPublicProfile: true,
-        createdAt: DateTime(2024, 1, 1),
-        updatedAt: DateTime.now(),
+      create: (_) => UserProfileProvider(
+        initialProfile: UserProfile(
+          id: 'demo_user_1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          phoneNumber: '+1234567890',
+          bio: 'Passionate learner exploring technology and data science',
+          location: 'San Francisco, CA',
+          occupation: 'Software Developer',
+          organization: 'Tech Company Inc.',
+          interests: ['Technology', 'Data Science', 'AI & Machine Learning'],
+          skills: ['JavaScript', 'Python', 'React', 'Flutter'],
+          educationLevel: EducationLevel.bachelor,
+          linkedInUrl: 'https://linkedin.com/in/johndoe',
+          githubUrl: 'https://github.com/johndoe',
+          isPublicProfile: true,
+          createdAt: DateTime(2024, 1, 1),
+          updatedAt: DateTime.now(),
+        ),
       ),
       child: const MyApp(),
     ),
@@ -51,11 +53,33 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _onboardingCompleted = false;
+  bool _isLoading = true;
 
-  void _completeOnboarding() => setState(() => _onboardingCompleted = true);
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboardingStatus();
+  }
+
+  Future<void> _checkOnboardingStatus() async {
+    // In a real app, you would check shared preferences or similar
+    await Future.delayed(const Duration(seconds: 1)); // Simulate loading
+    if (mounted) {
+      setState(() {
+        _onboardingCompleted = true; // Set to false to show onboarding first
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const MaterialApp(
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
+    }
+
     return MaterialApp(
       title: 'Excelerate Learning',
       debugShowCheckedModeBanner: false,
@@ -84,16 +108,21 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      home: _onboardingCompleted 
-          ? const LoginPage() // Transition to login after onboarding
-          : OnboardingScreen(onComplete: _completeOnboarding),
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/dashboard': (context) => const DashboardPage(),
-        '/main': (context) => const MainNavigation(),
-      },
+      home: _onboardingCompleted
+          ? const DashboardScreen()
+          : OnboardingScreen(
+              onComplete: () {
+                // This callback is called when onboarding is completed
+                // In a real app, you would save this preference
+                if (mounted) {
+                  setState(() {
+                    _onboardingCompleted = true;
+                  });
+                }
+              },
+            ),
     );
   }
 }
 
-// Keep existing MainNavigation class from main branch
+// Main navigation is now handled by DashboardScreen
