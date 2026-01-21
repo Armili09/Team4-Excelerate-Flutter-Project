@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // mock login state (replace later with AuthService)
-    final bool isLoggedIn = true;
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
+class _ProfileScreenState extends State<ProfileScreen> {
+  // This would typically come from an AuthService
+  bool _isLoggedIn = true;
+
+  void _toggleLogin() {
+    setState(() {
+      _isLoggedIn = !_isLoggedIn;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        centerTitle: true,
-      ),
-      body: isLoggedIn ? _loggedInView(context) : _guestView(context),
+      appBar: AppBar(title: const Text('Profile'), centerTitle: true),
+      body: _isLoggedIn ? _loggedInView(context) : _guestView(context),
     );
   }
 
@@ -24,31 +32,17 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            radius: 40,
-            child: Icon(Icons.person, size: 40),
-          ),
+          const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
           const SizedBox(height: 12),
           const Text(
             'John Doe',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const Text(
-            'johndoe@email.com',
-            style: TextStyle(color: Colors.grey),
-          ),
+          const Text('johndoe@email.com', style: TextStyle(color: Colors.grey)),
           const SizedBox(height: 24),
 
-          _profileTile(
-            icon: Icons.edit,
-            title: 'Edit Profile',
-            onTap: () {},
-          ),
-          _profileTile(
-            icon: Icons.bookmark,
-            title: 'My Courses',
-            onTap: () {},
-          ),
+          _profileTile(icon: Icons.edit, title: 'Edit Profile', onTap: () {}),
+          _profileTile(icon: Icons.bookmark, title: 'My Courses', onTap: () {}),
           _profileTile(
             icon: Icons.settings,
             title: 'Settings',
@@ -60,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.logout,
             title: 'Logout',
             color: Colors.red,
-            onTap: () {},
+            onTap: _toggleLogin,
           ),
         ],
       ),
@@ -75,15 +69,9 @@ class ProfileScreen extends StatelessWidget {
         children: [
           const Icon(Icons.lock_outline, size: 48),
           const SizedBox(height: 12),
-          const Text(
-            'You are not logged in',
-            style: TextStyle(fontSize: 18),
-          ),
+          const Text('You are not logged in', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Sign In'),
-          ),
+          ElevatedButton(onPressed: _toggleLogin, child: const Text('Sign In')),
         ],
       ),
     );
@@ -98,10 +86,7 @@ class ProfileScreen extends StatelessWidget {
   }) {
     return ListTile(
       leading: Icon(icon, color: color),
-      title: Text(
-        title,
-        style: TextStyle(color: color),
-      ),
+      title: Text(title, style: TextStyle(color: color)),
       trailing: const Icon(Icons.chevron_right),
       onTap: onTap,
     );
