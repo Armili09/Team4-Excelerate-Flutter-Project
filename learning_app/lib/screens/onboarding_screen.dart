@@ -11,7 +11,9 @@ import 'package:learning_app/screens/home_page.dart';
 
 /// Onboarding screen widget
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  final VoidCallback? onComplete;
+
+  const OnboardingScreen({super.key, this.onComplete});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
