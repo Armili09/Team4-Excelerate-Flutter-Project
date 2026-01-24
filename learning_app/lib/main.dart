@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.dark(
           primary: primaryColor,
           onPrimary: Colors.white,
-          background: backgroundColor,
           surface: Color(0xFF2A3A60),
           onSurface: Colors.white,
           secondary: Colors.yellow.shade700,
