@@ -13,40 +13,69 @@ class MyCoursesScreen extends StatefulWidget {
 }
 
 class _MyCoursesScreenState extends State<MyCoursesScreen> {
-  late Future<List<Course>> _futureCourses;
+  bool _loading = true;
+  String? _error;
+  List<Course> _courses = [];
   CourseFilter _filter = CourseFilter.all;
 
   @override
   void initState() {
     super.initState();
-    _futureCourses = _loadCourses();
+    _loadCourses();
   }
 
-  Future<List<Course>> _loadCourses() async {
-    final json = await DataService().fetchMyCourses();
-    return json.map((e) => Course.fromJson(e)).toList();
+  Future<void> _loadCourses() async {
+    try {
+      final json = await DataService().fetchMyCourses();
+      if (!mounted) return;
+      setState(() {
+        _courses = json.map((e) => Course.fromJson(e)).toList();
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Failed to load courses';
+        _loading = false;
+      });
+    }
   }
 
-  List<Course> _filteredCourses(List<Course> courses) {
+  List<Course> get _filteredCourses {
     switch (_filter) {
       case CourseFilter.inProgress:
-        return courses.where((c) => c.status == 'in_progress').toList();
+        return _courses.where((c) => c.status == 'in_progress').toList();
       case CourseFilter.completed:
-        return courses.where((c) => c.status == 'completed').toList();
+        return _courses.where((c) => c.status == 'completed').toList();
       default:
-        return courses;
+        return _courses;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('My Courses'), centerTitle: true),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('My Courses'), centerTitle: true),
+        body: Center(
+          child: Text(_error!, style: const TextStyle(color: Colors.red)),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('My Courses'), centerTitle: true),
       body: Column(
         children: [
-          /// SEGMENTED FILTER BAR
+          /// FILTER BAR
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            padding: const EdgeInsets.all(16),
             child: Container(
               decoration: BoxDecoration(
                 color: const Color(0xFF11283E),
@@ -55,7 +84,6 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
               child: Row(
                 children: CourseFilter.values.map((filter) {
                   final bool selected = _filter == filter;
-
                   return Expanded(
                     child: GestureDetector(
                       onTap: () => setState(() => _filter = filter),
@@ -88,89 +116,16 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
 
           /// COURSE LIST
           Expanded(
-            child: FutureBuilder<List<Course>>(
-              future: _futureCourses,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text(
-                      'Failed to load courses',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  );
-                }
-
-                final courses = _filteredCourses(snapshot.data ?? []);
-
-                if (courses.isEmpty) {
-                  return const _EmptyState();
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: courses.length,
-                  itemBuilder: (context, index) {
-                    final course = courses[index];
-
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              course.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            LinearProgressIndicator(
-                              value: course.progress,
-                              minHeight: 6,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${(course.progress * 100).round()}% • ${course.status.replaceAll('_', ' ')}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          CourseDetailScreen(course: course),
-                                    ),
-                                  );
-                                },
-                                child: const Text('View Details'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+            child: _filteredCourses.isEmpty
+                ? const _EmptyState()
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _filteredCourses.length,
+                    itemBuilder: (context, index) {
+                      final course = _filteredCourses[index];
+                      return _courseCard(course);
+                    },
+                  ),
           ),
         ],
       ),
@@ -186,6 +141,127 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
       default:
         return 'All';
     }
+  }
+
+  Widget _courseCard(Course course) {
+    Color statusColor;
+    switch (course.status) {
+      case 'completed':
+        statusColor = Colors.green.shade400;
+        break;
+      case 'in_progress':
+        statusColor = Colors.orange.shade400;
+        break;
+      default:
+        statusColor = Colors.grey.shade400;
+    }
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CourseDetailScreen(course: course),
+            ),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// TITLE + STATUS
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      course.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      course.status.replaceAll('_', ' ').toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              /// PROGRESS BAR
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: course.progress,
+                  minHeight: 8,
+                  backgroundColor: Colors.grey.shade800,
+                  valueColor: AlwaysStoppedAnimation(statusColor),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '${(course.progress * 100).round()}% completed',
+                style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+
+              /// DATES
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Start: ${course.startDate}',
+                    style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                  ),
+                  Text(
+                    'End: ${course.endDate}',
+                    style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CourseDetailScreen(course: course),
+                      ),
+                    );
+                  },
+                  child: const Text('View Details'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
