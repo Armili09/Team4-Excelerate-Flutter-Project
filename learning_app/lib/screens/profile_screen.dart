@@ -11,6 +11,20 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.watch<UserProfile>();
 
+    /// SAMPLE DATA (can later come from JSON)
+    final List<Map<String, String>> certificates = [
+      {'title': 'Flutter Development', 'date': 'Jan 2024'},
+      {'title': 'Cloud Architecture', 'date': 'Oct 2023'},
+      {'title': 'UI/UX Fundamentals', 'date': 'Aug 2023'},
+    ];
+
+    final List<String> badges = [
+      '7 Day Streak',
+      'Top Learner',
+      'Certified',
+      'Graduate',
+    ];
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -32,13 +46,20 @@ class ProfileScreen extends StatelessWidget {
               backgroundImage: NetworkImage(user.avatarUrl),
             ),
             const SizedBox(height: 12),
+
             Text(
               user.name,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Text(user.bio, style: TextStyle(color: Colors.grey.shade400)),
+            Text(
+              user.bio,
+              style: TextStyle(color: Colors.grey.shade400),
+              textAlign: TextAlign.center,
+            ),
+
             const SizedBox(height: 12),
 
+            /// EDIT PROFILE
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -55,10 +76,19 @@ class ProfileScreen extends StatelessWidget {
             Row(
               children: [
                 _statCard('${user.completedCourses}', 'Courses'),
-                _statCard('${user.certificates}', 'Certificates'),
-                _statCard('${user.badges}', 'Badges'),
+                _statCard('${certificates.length}', 'Certificates'),
+                _statCard('${badges.length}', 'Badges'),
               ],
             ),
+
+            const SizedBox(height: 32),
+
+            /// PROFILE DETAILS (UPDATED FROM EDIT PROFILE)
+            _section('Profile Details'),
+            _infoRow('Email', user.email),
+            _infoRow('Education', user.education),
+            _infoRow('Skills', user.skills.join(', ')),
+            _infoRow('Interests', user.interests.join(', ')),
 
             const SizedBox(height: 32),
 
@@ -85,11 +115,14 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+
             Column(
-              children: [
-                _infoCard(context, 'Cloud Architecture', 'Oct 2023'),
-                _infoCard(context, 'Flutter Development', 'Jan 2024'),
-              ],
+              children: certificates
+                  .take(2)
+                  .map(
+                    (cert) => _infoCard(context, cert['title']!, cert['date']!),
+                  )
+                  .toList(),
             ),
 
             const SizedBox(height: 32),
@@ -117,15 +150,8 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              children: [
-                _badge('7 Day Streak'),
-                _badge('Top Learner'),
-                _badge('Graduate'),
-                _badge('Certified'),
-              ],
-            ),
+
+            Wrap(spacing: 12, children: badges.map(_badge).toList()),
 
             const SizedBox(height: 32),
 
@@ -151,15 +177,15 @@ class ProfileScreen extends StatelessWidget {
               title: 'Logout',
               subtitle: '',
               bgColor: Colors.red.shade700,
-              onTap: () {
-                _showLogoutDialog(context);
-              },
+              onTap: () => _showLogoutDialog(context),
             ),
           ],
         ),
       ),
     );
   }
+
+  /// ---------- UI HELPERS ----------
 
   Widget _statCard(String value, String label) {
     return Expanded(
@@ -193,6 +219,28 @@ class ProfileScreen extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
+    ),
+  );
+
+  Widget _infoRow(String label, String value) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 90,
+          child: Text(
+            '$label:',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value.isNotEmpty ? value : '—',
+            style: TextStyle(color: Colors.grey.shade300),
+          ),
+        ),
+      ],
     ),
   );
 
@@ -235,7 +283,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(ctx); // close dialog
+              Navigator.pop(ctx);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
