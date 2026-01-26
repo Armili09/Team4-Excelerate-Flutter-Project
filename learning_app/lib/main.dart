@@ -9,18 +9,7 @@ import 'utils/user_profile.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => UserProfile(
-        avatarUrl: 'https://i.pravatar.cc/150?img=3',
-        name: 'John Doe',
-        bio: 'Flutter Developer & Learning Enthusiast',
-        email: 'john.doe@example.com',
-        education: 'B.Sc. Computer Science',
-        skills: ['Flutter', 'Dart', 'UI/UX'],
-        interests: ['Mobile Apps', 'AI', 'Gaming'],
-        completedCourses: 5,
-        badges: 3,
-        certificates: 2,
-      ),
+      create: (_) => UserProfile(), // now can initialize empty safely
       child: const MyApp(),
     ),
   );
@@ -44,14 +33,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.dark(
           primary: primaryColor,
           onPrimary: Colors.white,
-          surface: Color(0xFF2A3A60),
+          surface: const Color(0xFF2A3A60),
           onSurface: Colors.white,
-          secondary: Colors.yellow.shade700,
+          secondary: Colors.yellow,
         ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF1F2A44),
           centerTitle: true,
-          elevation: 2,
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color(0xFF1F2A44),
@@ -76,7 +64,7 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
+  final List<Widget> _screens = [
     HomeScreen(),
     ProgramsScreen(),
     MyCoursesScreen(),
