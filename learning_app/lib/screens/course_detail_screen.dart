@@ -10,11 +10,20 @@ class CourseDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(course.title)),
-      body: Center(
-        child: Text(
-          "Course details page\n(Coming soon)",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleMedium,
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              course.title,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            LinearProgressIndicator(value: course.progress),
+            const SizedBox(height: 12),
+            Text("Status: ${course.status.replaceAll('_', ' ')}"),
+          ],
         ),
       ),
     );
