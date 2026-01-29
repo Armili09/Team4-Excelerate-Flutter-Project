@@ -7,12 +7,12 @@ class ProgramFilterSheet extends StatefulWidget {
   final Function(String category, String difficulty, String duration) onApply;
 
   const ProgramFilterSheet({
-    Key? key,
+    super.key,
     required this.selectedCategory,
     required this.selectedDifficulty,
     required this.selectedDuration,
     required this.onApply,
-  }) : super(key: key);
+  });
 
   @override
   State<ProgramFilterSheet> createState() => _ProgramFilterSheetState();
@@ -69,10 +69,7 @@ class _ProgramFilterSheetState extends State<ProgramFilterSheet> {
             children: [
               const Text(
                 'Filter Programs',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               TextButton(
                 onPressed: () {
@@ -90,10 +87,7 @@ class _ProgramFilterSheetState extends State<ProgramFilterSheet> {
           // Category
           const Text(
             'Category',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -120,10 +114,7 @@ class _ProgramFilterSheetState extends State<ProgramFilterSheet> {
           // Difficulty
           const Text(
             'Difficulty',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -150,10 +141,7 @@ class _ProgramFilterSheetState extends State<ProgramFilterSheet> {
           // Duration
           const Text(
             'Duration',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -195,10 +183,7 @@ class _ProgramFilterSheetState extends State<ProgramFilterSheet> {
               ),
               child: const Text(
                 'Apply Filters',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),

@@ -4,7 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../utils/models/certificate.dart';
 
 class CertificatesScreen extends StatefulWidget {
-  const CertificatesScreen({Key? key}) : super(key: key);
+  const CertificatesScreen({super.key});
 
   @override
   State<CertificatesScreen> createState() => _CertificatesScreenState();
@@ -96,10 +96,14 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
   @override
   Widget build(BuildContext context) {
     final certificates = _sortedCertificates;
-    final totalCredits = _certificates.fold<int>(0, (sum, cert) => sum + cert.creditsEarned);
+    final totalCredits = _certificates.fold<int>(
+      0,
+      (sum, cert) => sum + cert.creditsEarned,
+    );
     final avgScore = _certificates.isEmpty
         ? 0.0
-        : _certificates.fold<double>(0, (sum, cert) => sum + cert.score) / _certificates.length;
+        : _certificates.fold<double>(0, (sum, cert) => sum + cert.score) /
+              _certificates.length;
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -153,11 +157,19 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatColumn('Certificates', '${certificates.length}', Icons.workspace_premium),
+                _buildStatColumn(
+                  'Certificates',
+                  '${certificates.length}',
+                  Icons.workspace_premium,
+                ),
                 Container(width: 1, height: 40, color: Colors.white30),
                 _buildStatColumn('Credits', '$totalCredits', Icons.school),
                 Container(width: 1, height: 40, color: Colors.white30),
-                _buildStatColumn('Avg Score', '${avgScore.toStringAsFixed(1)}%', Icons.grade),
+                _buildStatColumn(
+                  'Avg Score',
+                  '${avgScore.toStringAsFixed(1)}%',
+                  Icons.grade,
+                ),
               ],
             ),
           ),
@@ -166,8 +178,8 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
             child: certificates.isEmpty
                 ? _buildEmptyState()
                 : _viewMode == 'grid'
-                    ? _buildGridView(certificates)
-                    : _buildListView(certificates),
+                ? _buildGridView(certificates)
+                : _buildListView(certificates),
           ),
         ],
       ),
@@ -189,10 +201,7 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
         ),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
         ),
       ],
     );
@@ -253,7 +262,9 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                       ? [Colors.amber[700]!, Colors.amber[500]!]
                       : [Colors.blue[700]!, Colors.blue[500]!],
                 ),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
               child: Stack(
                 children: [
@@ -264,7 +275,8 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                       child: Image.asset(
                         'assets/images/certificate_pattern.png',
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                        errorBuilder: (context, error, stackTrace) =>
+                            const SizedBox(),
                       ),
                     ),
                   ),
@@ -281,7 +293,9 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          certificate.templateType == 'premium' ? 'PREMIUM' : 'CERTIFIED',
+                          certificate.templateType == 'premium'
+                              ? 'PREMIUM'
+                              : 'CERTIFIED',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -314,7 +328,11 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                     const Spacer(),
                     Row(
                       children: [
-                        Icon(Icons.calendar_today, size: 12, color: Colors.grey[600]),
+                        Icon(
+                          Icons.calendar_today,
+                          size: 12,
+                          color: Colors.grey[600],
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           DateFormat('MMM d, y').format(certificate.issueDate),
@@ -387,10 +405,7 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
         ),
         title: Text(
           certificate.courseTitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -432,7 +447,11 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.workspace_premium_outlined, size: 80, color: Colors.grey[300]),
+          Icon(
+            Icons.workspace_premium_outlined,
+            size: 80,
+            color: Colors.grey[300],
+          ),
           const SizedBox(height: 16),
           Text(
             'No Certificates Yet',
@@ -570,10 +589,15 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             _buildCertDetail('Score', '${certificate.score}%'),
-                            _buildCertDetail('Credits', '${certificate.creditsEarned}'),
+                            _buildCertDetail(
+                              'Credits',
+                              '${certificate.creditsEarned}',
+                            ),
                             _buildCertDetail(
                               'Completed',
-                              DateFormat('MMM y').format(certificate.completionDate),
+                              DateFormat(
+                                'MMM y',
+                              ).format(certificate.completionDate),
                             ),
                           ],
                         ),
@@ -661,10 +685,7 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
         ),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 11,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 11),
         ),
       ],
     );

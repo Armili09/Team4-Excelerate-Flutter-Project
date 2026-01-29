@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../../utils/models/badge.dart' as custom_badge;
 
 class BadgesScreen extends StatefulWidget {
-  const BadgesScreen({Key? key}) : super(key: key);
+  const BadgesScreen({super.key});
 
   @override
   State<BadgesScreen> createState() => _BadgesScreenState();

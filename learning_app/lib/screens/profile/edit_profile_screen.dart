@@ -6,7 +6,7 @@ import '../../utils/models/user_profile.dart';
 class EditProfileScreen extends StatefulWidget {
   final UserProfile? profile;
 
-  const EditProfileScreen({Key? key, this.profile}) : super(key: key);
+  const EditProfileScreen({super.key, this.profile});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -74,15 +74,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _initializeControllers() {
     final profile = widget.profile;
-    _firstNameController = TextEditingController(text: profile?.firstName ?? '');
+    _firstNameController = TextEditingController(
+      text: profile?.firstName ?? '',
+    );
     _lastNameController = TextEditingController(text: profile?.lastName ?? '');
     _emailController = TextEditingController(text: profile?.email ?? '');
     _phoneController = TextEditingController(text: profile?.phoneNumber ?? '');
     _bioController = TextEditingController(text: profile?.bio ?? '');
     _locationController = TextEditingController(text: profile?.location ?? '');
-    _occupationController = TextEditingController(text: profile?.occupation ?? '');
-    _organizationController = TextEditingController(text: profile?.organization ?? '');
-    _linkedInController = TextEditingController(text: profile?.linkedInUrl ?? '');
+    _occupationController = TextEditingController(
+      text: profile?.occupation ?? '',
+    );
+    _organizationController = TextEditingController(
+      text: profile?.organization ?? '',
+    );
+    _linkedInController = TextEditingController(
+      text: profile?.linkedInUrl ?? '',
+    );
     _githubController = TextEditingController(text: profile?.githubUrl ?? '');
 
     _profileImageUrl = profile?.profileImageUrl;
@@ -190,7 +198,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 if (value == null || value.isEmpty) {
                   return 'Email is required';
                 }
-                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                if (!RegExp(
+                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                ).hasMatch(value)) {
                   return 'Enter a valid email';
                 }
                 return null;
@@ -336,7 +346,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   color: Colors.blue,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.camera_alt,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),
@@ -402,7 +416,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     : 'Date of Birth',
                 style: TextStyle(
                   fontSize: 16,
-                  color: _dateOfBirth != null ? Colors.black87 : Colors.grey[600],
+                  color: _dateOfBirth != null
+                      ? Colors.black87
+                      : Colors.grey[600],
                 ),
               ),
             ),
@@ -426,7 +442,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: DropdownButtonFormField<EducationLevel>(
-        value: _educationLevel,
+        initialValue: _educationLevel,
         decoration: const InputDecoration(
           labelText: 'Education Level',
           border: InputBorder.none,
@@ -533,17 +549,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 const Text(
                   'Public Profile',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 Text(
                   'Allow others to view your profile',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -734,13 +744,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       bio: _bioController.text.isEmpty ? null : _bioController.text,
       profileImageUrl: _profileImageUrl,
       dateOfBirth: _dateOfBirth,
-      location: _locationController.text.isEmpty ? null : _locationController.text,
-      occupation: _occupationController.text.isEmpty ? null : _occupationController.text,
-      organization: _organizationController.text.isEmpty ? null : _organizationController.text,
+      location: _locationController.text.isEmpty
+          ? null
+          : _locationController.text,
+      occupation: _occupationController.text.isEmpty
+          ? null
+          : _occupationController.text,
+      organization: _organizationController.text.isEmpty
+          ? null
+          : _organizationController.text,
       interests: _interests,
       skills: _skills,
       educationLevel: _educationLevel,
-      linkedInUrl: _linkedInController.text.isEmpty ? null : _linkedInController.text,
+      linkedInUrl: _linkedInController.text.isEmpty
+          ? null
+          : _linkedInController.text,
       githubUrl: _githubController.text.isEmpty ? null : _githubController.text,
       isPublicProfile: _isPublicProfile,
       createdAt: widget.profile?.createdAt ?? DateTime.now(),

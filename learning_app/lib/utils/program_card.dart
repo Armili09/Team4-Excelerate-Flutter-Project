@@ -7,11 +7,11 @@ class ProgramCard extends StatelessWidget {
   final bool showGuestPrompt;
 
   const ProgramCard({
-    Key? key,
+    super.key,
     required this.program,
     required this.onTap,
     this.showGuestPrompt = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

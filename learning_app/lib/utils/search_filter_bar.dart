@@ -6,11 +6,11 @@ class SearchFilterBar extends StatelessWidget {
   final VoidCallback? onFilterTap;
 
   const SearchFilterBar({
-    Key? key,
+    super.key,
     required this.searchQuery,
     required this.onSearchChanged,
     this.onFilterTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,10 @@ class SearchFilterBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
             ),
           ),
