@@ -3,7 +3,7 @@ import '../../utils/models/program.dart';
 import '../../utils/program_card.dart';
 
 class ProgramListingGuestScreen extends StatefulWidget {
-  const ProgramListingGuestScreen({Key? key}) : super(key: key);
+  const ProgramListingGuestScreen({super.key});
 
   @override
   State<ProgramListingGuestScreen> createState() =>

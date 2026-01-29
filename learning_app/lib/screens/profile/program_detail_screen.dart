@@ -6,10 +6,10 @@ class ProgramDetailScreen extends StatelessWidget {
   final bool isGuestMode;
 
   const ProgramDetailScreen({
-    Key? key,
+    super.key,
     required this.program,
     this.isGuestMode = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
