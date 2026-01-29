@@ -18,27 +18,7 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => UserProfileProvider(
-        initialProfile: UserProfile(
-          id: 'demo_user_1',
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-          phoneNumber: '+1234567890',
-          bio: 'Passionate learner exploring technology and data science',
-          location: 'San Francisco, CA',
-          occupation: 'Software Developer',
-          organization: 'Tech Company Inc.',
-          interests: ['Technology', 'Data Science', 'AI & Machine Learning'],
-          skills: ['JavaScript', 'Python', 'React', 'Flutter'],
-          educationLevel: EducationLevel.bachelor,
-          linkedInUrl: 'https://linkedin.com/in/johndoe',
-          githubUrl: 'https://github.com/johndoe',
-          isPublicProfile: true,
-          createdAt: DateTime(2024, 1, 1),
-          updatedAt: DateTime.now(),
-        ),
-      ),
+      create: (_) => UserProfile(), // now can initialize empty safely
       child: const MyApp(),
     ),
   );
@@ -88,15 +68,17 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.grey[50],
         fontFamily: 'Inter',
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
+        scaffoldBackgroundColor: backgroundColor,
+        colorScheme: ColorScheme.dark(
+          primary: primaryColor,
+          onPrimary: Colors.white,
+          surface: const Color(0xFF2A3A60),
+          onSurface: Colors.white,
+          secondary: Colors.yellow,
         ),
         appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: false,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
+          backgroundColor: Color(0xFF1F2A44),
+          centerTitle: true,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -125,4 +107,40 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-// Main navigation is now handled by DashboardScreen
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key});
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    HomeScreen(),
+    ProgramsScreen(),
+    MyCoursesScreen(),
+    ProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Programs'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: 'Learning',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
+}

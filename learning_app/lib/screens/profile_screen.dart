@@ -1,15 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/user_profile.dart';
+import '../services/data_service.dart';
 import 'edit_profile_screen.dart';
 import 'placeholder_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _loading = true;
+  String? _error;
+
+  // These will be loaded dynamically
+  List<Map<String, String>> certificates = [];
+  List<String> badges = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  /// Fetch profile + courses
+  Future<void> _loadData() async {
+    try {
+      final userJson = await DataService().fetchUserProfile();
+      final coursesJson = await DataService().fetchMyCourses();
+
+      if (!mounted) return;
+
+      // Load user profile into provider
+      context.read<UserProfile>().loadFromJson(userJson);
+
+      // Certificates from completed courses
+      final completedCourses = coursesJson
+          .where((c) => c['status'] == 'completed')
+          .toList();
+      certificates = completedCourses
+          .map((c) => {'title': c['title'].toString(), 'date': 'Jan 2024'})
+          .toList();
+
+      // Example badges
+      badges = ['7 Day Streak', 'Top Learner', 'Certified', 'Graduate'];
+
+      setState(() => _loading = false);
+    } catch (e) {
+      setState(() {
+        _error = 'Failed to load profile';
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProfile>();
+
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        body: Center(
+          child: Text(_error!, style: const TextStyle(color: Colors.red)),
+        ),
+      );
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -19,26 +81,38 @@ class ProfileScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
 
-            /// PAGE TITLE
+            // Page Title
             const Text(
               'User Profile',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
 
-            /// PROFILE HEADER
+            // Profile Header
             CircleAvatar(
               radius: 48,
-              backgroundImage: NetworkImage(user.avatarUrl),
+              backgroundImage: user.avatarUrl.isNotEmpty
+                  ? NetworkImage(user.avatarUrl)
+                  : null,
+              child: user.avatarUrl.isEmpty
+                  ? const Icon(Icons.person, size: 48)
+                  : null,
             ),
-            const SizedBox(height: 12),
-            Text(
-              user.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(user.bio, style: TextStyle(color: Colors.grey.shade400)),
             const SizedBox(height: 12),
 
+            Text(
+              user.name.isNotEmpty ? user.name : '—',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              user.bio.isNotEmpty ? user.bio : '',
+              style: TextStyle(color: Colors.grey.shade400),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 12),
+
+            // Edit Profile Button
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -51,18 +125,27 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            /// STATS
+            // Stats
             Row(
               children: [
                 _statCard('${user.completedCourses}', 'Courses'),
-                _statCard('${user.certificates}', 'Certificates'),
-                _statCard('${user.badges}', 'Badges'),
+                _statCard('${certificates.length}', 'Certificates'),
+                _statCard('${badges.length}', 'Badges'),
               ],
             ),
 
             const SizedBox(height: 32),
 
-            /// CERTIFICATES SECTION
+            // Profile Details
+            _section('Profile Details'),
+            _infoRow('Email', user.email),
+            _infoRow('Education', user.education),
+            _infoRow('Skills', user.skills.join(', ')),
+            _infoRow('Interests', user.interests.join(', ')),
+
+            const SizedBox(height: 32),
+
+            // Certificates Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -86,15 +169,17 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Column(
-              children: [
-                _infoCard(context, 'Cloud Architecture', 'Oct 2023'),
-                _infoCard(context, 'Flutter Development', 'Jan 2024'),
-              ],
+              children: certificates
+                  .take(2)
+                  .map(
+                    (cert) => _infoCard(context, cert['title']!, cert['date']!),
+                  )
+                  .toList(),
             ),
 
             const SizedBox(height: 32),
 
-            /// BADGES SECTION
+            // Badges Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -117,19 +202,11 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              children: [
-                _badge('7 Day Streak'),
-                _badge('Top Learner'),
-                _badge('Graduate'),
-                _badge('Certified'),
-              ],
-            ),
+            Wrap(spacing: 12, children: badges.map(_badge).toList()),
 
             const SizedBox(height: 32),
 
-            /// ACCOUNT SECTION
+            // Account Section
             _section('Account'),
             _accountTile(
               context,
@@ -152,7 +229,14 @@ class ProfileScreen extends StatelessWidget {
               subtitle: '',
               bgColor: Colors.red.shade700,
               onTap: () {
-                _showLogoutDialog(context);
+                context.read<UserProfile>().clear();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const PlaceholderScreen(title: 'Logged Out'),
+                  ),
+                );
               },
             ),
           ],
@@ -161,29 +245,25 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _statCard(String value, String label) {
-    return Expanded(
-      child: Card(
-        color: const Color(0xFF11283E),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(label, style: const TextStyle(fontSize: 12)),
-            ],
-          ),
+  /// ----------------- UI Helpers -----------------
+
+  Widget _statCard(String value, String label) => Expanded(
+    child: Card(
+      color: const Color(0xFF11283E),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          children: [
+            Text(
+              value,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(label, style: const TextStyle(fontSize: 12)),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
 
   Widget _section(String title) => Align(
     alignment: Alignment.centerLeft,
@@ -196,9 +276,31 @@ class ProfileScreen extends StatelessWidget {
     ),
   );
 
+  Widget _infoRow(String label, String value) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 90,
+          child: Text(
+            '$label:',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value.isNotEmpty ? value : '—',
+            style: TextStyle(color: Colors.grey.shade300),
+          ),
+        ),
+      ],
+    ),
+  );
+
   Widget _infoCard(BuildContext context, String title, String subtitle) => Card(
     color: const Color(0xFF11283E),
-    child: ListTile(title: Text(title), subtitle: Text(subtitle), onTap: () {}),
+    child: ListTile(title: Text(title), subtitle: Text(subtitle)),
   );
 
   Widget _badge(String label) =>
@@ -221,32 +323,4 @@ class ProfileScreen extends StatelessWidget {
       onTap: onTap,
     ),
   );
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx); // close dialog
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const PlaceholderScreen(title: 'Logged Out'),
-                ),
-              );
-            },
-            child: const Text('Logout', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-  }
 }
