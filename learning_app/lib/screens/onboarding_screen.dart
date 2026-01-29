@@ -7,7 +7,7 @@ import 'package:learning_app/utils/intro_screens/intro_page_1.dart';
 import 'package:learning_app/utils/intro_screens/intro_page_2.dart';
 import 'package:learning_app/utils/intro_screens/intro_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:learning_app/screens/home_page.dart';
+import 'package:learning_app/main.dart';
 
 /// Onboarding screen widget
 class OnboardingScreen extends StatefulWidget {
@@ -132,12 +132,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     /// what will appear on the last onboarding screen
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        );
+                        if (widget.onComplete != null) {
+                          widget.onComplete!();
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainNavigation(),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade100,

@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'screens/dashboard/dashboard_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/features/login/login_page.dart';
+import 'screens/home_screen.dart';
+import 'screens/programs_screen.dart';
+import 'screens/my_courses_screen.dart';
+import 'screens/profile_screen.dart';
 import 'providers/user_profile_provider.dart';
 import 'utils/models/user_profile.dart';
+
+// Color constants
+const Color backgroundColor = Color(0xFF1A1A2E);
+const Color primaryColor = Color(0xFF4A90E2);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +26,16 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => UserProfile(), // now can initialize empty safely
+      create: (_) => UserProfileProvider(
+        initialProfile: UserProfile(
+          id: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      ),
       child: const MyApp(),
     ),
   );
@@ -33,6 +50,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _onboardingCompleted = false;
+  bool _isAuthenticated = false;
   bool _isLoading = true;
 
   @override
@@ -46,7 +64,7 @@ class _MyAppState extends State<MyApp> {
     await Future.delayed(const Duration(seconds: 1)); // Simulate loading
     if (mounted) {
       setState(() {
-        _onboardingCompleted = true; // Set to false to show onboarding first
+        _onboardingCompleted = false; // Set to false to show onboarding first
         _isLoading = false;
       });
     }
@@ -64,11 +82,8 @@ class _MyAppState extends State<MyApp> {
       title: 'Excelerate Learning',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[50],
         fontFamily: 'Inter',
         useMaterial3: true,
-        scaffoldBackgroundColor: backgroundColor,
         colorScheme: ColorScheme.dark(
           primary: primaryColor,
           onPrimary: Colors.white,
@@ -80,6 +95,15 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Color(0xFF1F2A44),
           centerTitle: true,
         ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color(0xFF1F2A44),
+          selectedItemColor: Color(0xFF4A90E2),
+          unselectedItemColor: Colors.grey,
+          selectedIconTheme: IconThemeData(size: 24),
+          unselectedIconTheme: IconThemeData(size: 24),
+          selectedLabelStyle: TextStyle(fontSize: 12),
+          unselectedLabelStyle: TextStyle(fontSize: 12),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 0,
@@ -90,19 +114,25 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      home: _onboardingCompleted
-          ? const DashboardScreen()
-          : OnboardingScreen(
+      home: _isLoading
+          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+          : !_onboardingCompleted
+          ? OnboardingScreen(
               onComplete: () {
-                // This callback is called when onboarding is completed
-                // In a real app, you would save this preference
-                if (mounted) {
-                  setState(() {
-                    _onboardingCompleted = true;
-                  });
-                }
+                setState(() {
+                  _onboardingCompleted = true;
+                });
               },
-            ),
+            )
+          : !_isAuthenticated
+          ? LoginPage(
+              onAuthSuccess: () {
+                setState(() {
+                  _isAuthenticated = true;
+                });
+              },
+            )
+          : const MainNavigation(),
     );
   }
 }
@@ -118,10 +148,10 @@ class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    ProgramsScreen(),
-    MyCoursesScreen(),
-    ProfileScreen(),
+    const HomeScreen(),
+    const ProgramsScreen(),
+    const MyCoursesScreen(),
+    const ProfileScreen(),
   ];
 
   @override
