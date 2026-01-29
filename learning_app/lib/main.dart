@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'screens/home_screen.dart';
-import 'screens/programs_screen.dart';
-import 'screens/my_courses_screen.dart';
-import 'screens/profile_screen.dart';
-import 'utils/user_profile.dart';
+import 'screens/dashboard/dashboard_screen.dart';
+import 'screens/onboarding_screen.dart';
+import 'providers/user_profile_provider.dart';
+import 'utils/models/user_profile.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  // Initialize any required services here
+  // For example: AuthService.initialize();
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => UserProfile(), // now can initialize empty safely
@@ -15,19 +24,49 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _onboardingCompleted = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboardingStatus();
+  }
+
+  Future<void> _checkOnboardingStatus() async {
+    // In a real app, you would check shared preferences or similar
+    await Future.delayed(const Duration(seconds: 1)); // Simulate loading
+    if (mounted) {
+      setState(() {
+        _onboardingCompleted = true; // Set to false to show onboarding first
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF1C64F2);
-    const backgroundColor = Color(0xFF1F2A44);
+    if (_isLoading) {
+      return const MaterialApp(
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
+    }
 
     return MaterialApp(
+      title: 'Excelerate Learning',
       debugShowCheckedModeBanner: false,
-      title: 'Learning App',
       theme: ThemeData(
-        brightness: Brightness.dark,
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[50],
+        fontFamily: 'Inter',
         useMaterial3: true,
         scaffoldBackgroundColor: backgroundColor,
         colorScheme: ColorScheme.dark(
@@ -41,15 +80,29 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color(0xFF1F2A44),
           centerTitle: true,
         ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color(0xFF1F2A44),
-          selectedItemColor: Color(0xFF1C64F2),
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
         ),
       ),
-      home: const MainNavigation(),
+      home: _onboardingCompleted
+          ? const DashboardScreen()
+          : OnboardingScreen(
+              onComplete: () {
+                // This callback is called when onboarding is completed
+                // In a real app, you would save this preference
+                if (mounted) {
+                  setState(() {
+                    _onboardingCompleted = true;
+                  });
+                }
+              },
+            ),
     );
   }
 }
