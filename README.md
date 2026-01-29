@@ -16,9 +16,10 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 
 ### Onboarding and Spash Screen:
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/bc29f2d0-62bd-40dc-8a49-9256c1a2dee2" width="250" />
-  <img src="https://github.com/user-attachments/assets/85802704-158e-4f53-9d4c-0529ae4b4c38" width="250" />
-  <img src="https://github.com/user-attachments/assets/aba49112-baf4-4ea6-8d85-3a416c0e7d41" width="250" />
+  <img width="200" alt="splash-screen" src="https://github.com/user-attachments/assets/4c60b8e4-c295-4ba1-8007-f6ff8a24ac02" />
+  <img alt="splash-screen" src="https://github.com/user-attachments/assets/bc29f2d0-62bd-40dc-8a49-9256c1a2dee2" width="200" />
+  <img src="https://github.com/user-attachments/assets/85802704-158e-4f53-9d4c-0529ae4b4c38" width="200" />
+  <img src="https://github.com/user-attachments/assets/aba49112-baf4-4ea6-8d85-3a416c0e7d41" width="200" />
 </p>
 
 ### Login Page
