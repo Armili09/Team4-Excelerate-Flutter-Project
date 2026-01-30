@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/features/login/login_page.dart';
-import 'screens/home_screen.dart';
-import 'screens/programs_screen.dart';
+import 'screens/dashboard/home_screen.dart';
+import 'screens/program_listing_screen.dart';
 import 'screens/my_courses_screen.dart';
 import 'screens/profile_screen.dart';
 import 'providers/user_profile_provider.dart';
@@ -149,7 +149,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const ProgramsScreen(),
+    const ProgramListScreen(),
     const MyCoursesScreen(),
     const ProfileScreen(),
   ];
