@@ -1,36 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../dashboard/dashboard_page.dart';
+import '../../dashboard/dashboard_screen.dart';
+import '../../../providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final VoidCallback? onAuthSuccess;
+
+  const LoginPage({super.key, this.onAuthSuccess});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
-
-class MockUser {
-  final String name;
-  final String email;
-  final String password;
-
-  MockUser({
-    required this.name,
-    required this.email,
-    required this.password,
-  });
-}
-
-class MockAuthStore {
-  static final List<MockUser> users = [
-    MockUser(
-      name: 'Demo Student',
-      email: 'student@eduportal.com',
-      password: 'password123',
-    ),
-  ];
-}
-
 
 class _LoginPageState extends State<LoginPage> {
   bool isLogin = true;
@@ -51,41 +32,38 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _registerMockUser() {
+  void _registerMockUser() async {
+    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
-    final alreadyExists = MockAuthStore.users.any(
-          (u) => u.email == email,
+    final success = await context.read<AuthProvider>().signUp(
+      name,
+      email,
+      password,
     );
 
-    if (alreadyExists) {
-      _showErrorSnackBar('Email already registered');
-      return;
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account created successfully 🎉'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Clear fields
+      _nameController.clear();
+      _emailController.clear();
+      _passwordController.clear();
+      _confirmPasswordController.clear();
+
+      // Navigate to dashboard
+      _navigateToDashboard();
+    } else {
+      _showErrorSnackBar(
+        context.read<AuthProvider>().error ?? 'Registration failed',
+      );
     }
-
-    MockAuthStore.users.add(
-      MockUser(
-        name: _nameController.text.trim(),
-        email: email,
-        password: _passwordController.text,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Account created successfully 🎉'),
-        backgroundColor: Colors.green,
-      ),
-    );
-
-    // Clear fields
-    _nameController.clear();
-    _emailController.clear();
-    _passwordController.clear();
-    _confirmPasswordController.clear();
-
-    // Navigate back to login
-    setState(() => isLogin = true);
   }
 
   void _showErrorSnackBar(String message) {
@@ -95,35 +73,35 @@ class _LoginPageState extends State<LoginPage> {
         content: Text(message),
         backgroundColor: Colors.orange,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
 
-  void _loginMockUser() {
+  void _loginMockUser() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    final user = MockAuthStore.users.firstWhere(
-          (u) => u.email == email && u.password == password,
-      orElse: () => MockUser(name: '', email: '', password: ''),
-    );
+    final success = await context.read<AuthProvider>().signIn(email, password);
 
-    if (user.email.isEmpty) {
-      _showErrorSnackBar('Invalid email or password');
-      return;
+    if (success) {
+      _navigateToDashboard();
+    } else {
+      _showErrorSnackBar(
+        context.read<AuthProvider>().error ?? 'Invalid email or password',
+      );
     }
-
-    _navigateToDashboard();
   }
 
   void _navigateToDashboard() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const DashboardPage()),
-    );
+    if (widget.onAuthSuccess != null) {
+      widget.onAuthSuccess!();
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+      );
+    }
   }
 
   @override
@@ -165,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
               color: const Color(0xFF2B8CEE).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.school, color: Color(0xFF2B8CEE) ,size: 30,),
+            child: const Icon(Icons.school, color: Color(0xFF2B8CEE), size: 30),
           ),
           const Expanded(
             child: Center(
@@ -434,9 +412,7 @@ class _LoginPageState extends State<LoginPage> {
         hintText: isConfirm ? 'Confirm password' : 'Enter your password',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         suffixIcon: IconButton(
-          icon: Icon(
-            obscurePassword ? Icons.visibility : Icons.visibility_off,
-          ),
+          icon: Icon(obscurePassword ? Icons.visibility : Icons.visibility_off),
           onPressed: () => setState(() {
             obscurePassword = !obscurePassword;
           }),
@@ -468,16 +444,16 @@ class _LoginPageState extends State<LoginPage> {
           if (!isValid) {
             if (_emailController.text.isEmpty) {
               _showErrorSnackBar('Email is required');
-            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                .hasMatch(_emailController.text)) {
+            } else if (!RegExp(
+              r'^[^@]+@[^@]+\.[^@]+',
+            ).hasMatch(_emailController.text)) {
               _showErrorSnackBar('Enter a valid email address');
             } else if (_passwordController.text.isEmpty) {
               _showErrorSnackBar('Password is required');
             } else if (_passwordController.text.length < 6) {
               _showErrorSnackBar('Password must be at least 6 characters');
             } else if (!isLogin &&
-                _confirmPasswordController.text !=
-                    _passwordController.text) {
+                _confirmPasswordController.text != _passwordController.text) {
               _showErrorSnackBar('Passwords do not match');
             }
             return;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../utils/user_profile.dart';
+import '../utils/models/user_profile.dart';
+import '../providers/user_profile_provider.dart';
+import '../providers/auth_provider.dart';
 import '../services/data_service.dart';
 import 'edit_profile_screen.dart';
 import 'placeholder_screen.dart';
@@ -26,6 +28,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadData();
   }
 
+  /// Map old education strings to EducationLevel enum
+  EducationLevel _mapEducationLevel(String? education) {
+    if (education == null) return EducationLevel.other;
+
+    switch (education.toLowerCase()) {
+      case 'high school':
+        return EducationLevel.highSchool;
+      case 'associate':
+      case 'associate degree':
+        return EducationLevel.associate;
+      case 'bachelor':
+      case 'bs':
+      case 'ba':
+        return EducationLevel.bachelor;
+      case 'master':
+      case 'ms':
+      case 'ma':
+        return EducationLevel.master;
+      case 'phd':
+      case 'doctorate':
+        return EducationLevel.doctorate;
+      default:
+        return EducationLevel.other;
+    }
+  }
+
   /// Fetch profile + courses
   Future<void> _loadData() async {
     try {
@@ -34,8 +62,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!mounted) return;
 
-      // Load user profile into provider
-      context.read<UserProfile>().loadFromJson(userJson);
+      // Load user profile into provider - map old fields to new structure
+      final mappedUserJson = {
+        'id': userJson['id'] ?? 'user123',
+        'firstName': (userJson['name'] as String?)?.split(' ').first ?? '',
+        'lastName': (userJson['name'] as String?)?.split(' ').last ?? '',
+        'email': userJson['email'] ?? '',
+        'profileImageUrl': userJson['avatarUrl'] ?? '',
+        'bio': userJson['bio'] ?? '',
+        'educationLevel': _mapEducationLevel(userJson['education'] as String?),
+        'skills': List<String>.from(userJson['skills'] ?? []),
+        'interests': List<String>.from(userJson['interests'] ?? []),
+        'createdAt': DateTime.now().toIso8601String(),
+        'updatedAt': DateTime.now().toIso8601String(),
+      };
+
+      context.read<UserProfileProvider>().updateProfile(
+        UserProfile.fromJson(mappedUserJson),
+      );
 
       // Certificates from completed courses
       final completedCourses = coursesJson
@@ -59,7 +103,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProfile>();
+    final userProfileProvider = context.watch<UserProfileProvider>();
+    final user = userProfileProvider.userProfile;
 
     if (_loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -91,21 +136,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Profile Header
             CircleAvatar(
               radius: 48,
-              backgroundImage: user.avatarUrl.isNotEmpty
-                  ? NetworkImage(user.avatarUrl)
+              backgroundImage: user.profileImageUrl?.isNotEmpty == true
+                  ? NetworkImage(user.profileImageUrl!)
                   : null,
-              child: user.avatarUrl.isEmpty
+              child: user.profileImageUrl?.isEmpty != false
                   ? const Icon(Icons.person, size: 48)
                   : null,
             ),
             const SizedBox(height: 12),
 
             Text(
-              user.name.isNotEmpty ? user.name : '—',
+              user.fullName.isNotEmpty ? user.fullName : '—',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              user.bio.isNotEmpty ? user.bio : '',
+              user.bio ?? '',
               style: TextStyle(color: Colors.grey.shade400),
               textAlign: TextAlign.center,
             ),
@@ -128,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Stats
             Row(
               children: [
-                _statCard('${user.completedCourses}', 'Courses'),
+                _statCard('0', 'Courses'),
                 _statCard('${certificates.length}', 'Certificates'),
                 _statCard('${badges.length}', 'Badges'),
               ],
@@ -139,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Profile Details
             _section('Profile Details'),
             _infoRow('Email', user.email),
-            _infoRow('Education', user.education),
+            _infoRow('Education', user.educationLevel?.toString() ?? '—'),
             _infoRow('Skills', user.skills.join(', ')),
             _infoRow('Interests', user.interests.join(', ')),
 
@@ -228,15 +273,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'Logout',
               subtitle: '',
               bgColor: Colors.red.shade700,
-              onTap: () {
-                context.read<UserProfile>().clear();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        const PlaceholderScreen(title: 'Logged Out'),
+              onTap: () async {
+                // Clear user profile
+                context.read<UserProfileProvider>().updateProfile(
+                  UserProfile(
+                    id: '',
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
                   ),
                 );
+
+                // Sign out using AuthProvider
+                await context.read<AuthProvider>().signOut();
               },
             ),
           ],
