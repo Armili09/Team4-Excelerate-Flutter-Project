@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/models/user_profile.dart';
 import '../providers/user_profile_provider.dart';
+import '../providers/auth_provider.dart';
 import '../services/data_service.dart';
 import 'edit_profile_screen.dart';
 import 'placeholder_screen.dart';
@@ -272,7 +273,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'Logout',
               subtitle: '',
               bgColor: Colors.red.shade700,
-              onTap: () {
+              onTap: () async {
+                // Clear user profile
                 context.read<UserProfileProvider>().updateProfile(
                   UserProfile(
                     id: '',
@@ -283,13 +285,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     updatedAt: DateTime.now(),
                   ),
                 );
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        const PlaceholderScreen(title: 'Logged Out'),
-                  ),
-                );
+
+                // Sign out using AuthProvider
+                await context.read<AuthProvider>().signOut();
               },
             ),
           ],
