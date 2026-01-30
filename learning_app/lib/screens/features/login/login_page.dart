@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../dashboard/dashboard_page.dart';
+import '../../dashboard/dashboard_screen.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback? onAuthSuccess;
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const DashboardPage()),
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
       );
     }
   }
