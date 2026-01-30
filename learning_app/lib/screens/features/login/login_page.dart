@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../dashboard/dashboard_screen.dart';
+import '../../../providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback? onAuthSuccess;
@@ -9,24 +11,6 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
-}
-
-class MockUser {
-  final String name;
-  final String email;
-  final String password;
-
-  MockUser({required this.name, required this.email, required this.password});
-}
-
-class MockAuthStore {
-  static final List<MockUser> users = [
-    MockUser(
-      name: 'Demo Student',
-      email: 'student@eduportal.com',
-      password: 'password123',
-    ),
-  ];
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -48,39 +32,38 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _registerMockUser() {
+  void _registerMockUser() async {
+    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
-    final alreadyExists = MockAuthStore.users.any((u) => u.email == email);
+    final success = await context.read<AuthProvider>().signUp(
+      name,
+      email,
+      password,
+    );
 
-    if (alreadyExists) {
-      _showErrorSnackBar('Email already registered');
-      return;
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account created successfully 🎉'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Clear fields
+      _nameController.clear();
+      _emailController.clear();
+      _passwordController.clear();
+      _confirmPasswordController.clear();
+
+      // Navigate to dashboard
+      _navigateToDashboard();
+    } else {
+      _showErrorSnackBar(
+        context.read<AuthProvider>().error ?? 'Registration failed',
+      );
     }
-
-    MockAuthStore.users.add(
-      MockUser(
-        name: _nameController.text.trim(),
-        email: email,
-        password: _passwordController.text,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Account created successfully 🎉'),
-        backgroundColor: Colors.green,
-      ),
-    );
-
-    // Clear fields
-    _nameController.clear();
-    _emailController.clear();
-    _passwordController.clear();
-    _confirmPasswordController.clear();
-
-    // Navigate back to login
-    setState(() => isLogin = true);
   }
 
   void _showErrorSnackBar(String message) {
@@ -95,21 +78,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _loginMockUser() {
+  void _loginMockUser() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    final user = MockAuthStore.users.firstWhere(
-      (u) => u.email == email && u.password == password,
-      orElse: () => MockUser(name: '', email: '', password: ''),
-    );
+    final success = await context.read<AuthProvider>().signIn(email, password);
 
-    if (user.email.isEmpty) {
-      _showErrorSnackBar('Invalid email or password');
-      return;
+    if (success) {
+      _navigateToDashboard();
+    } else {
+      _showErrorSnackBar(
+        context.read<AuthProvider>().error ?? 'Invalid email or password',
+      );
     }
-
-    _navigateToDashboard();
   }
 
   void _navigateToDashboard() {
