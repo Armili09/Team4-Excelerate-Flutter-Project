@@ -9,7 +9,7 @@ import 'utils/user_profile.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => UserProfile(), // now can initialize empty safely
+      create: (_) => UserProfile(),
       child: const MyApp(),
     ),
   );

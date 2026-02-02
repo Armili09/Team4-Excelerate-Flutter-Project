@@ -50,8 +50,8 @@ class UserProfile extends ChangeNotifier {
     if (education != null) this.education = education;
     if (skills != null) this.skills = skills;
     if (interests != null) this.interests = interests;
-    if (certificates != null) this.certificateList = certificates;
-    if (badges != null) this.badgeList = badges;
+    if (certificates != null) certificateList = certificates;
+    if (badges != null) badgeList = badges;
 
     notifyListeners();
   }

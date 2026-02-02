@@ -54,15 +54,11 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('My Courses'), centerTitle: true),
-        body: const Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (_error != null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('My Courses'), centerTitle: true),
         body: Center(
           child: Text(_error!, style: const TextStyle(color: Colors.red)),
         ),
@@ -193,18 +189,6 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
                       horizontal: 8,
                       vertical: 4,
                     ),
-                    decoration: BoxDecoration(
-                      color: statusColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      course.status.replaceAll('_', ' ').toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -241,8 +225,8 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 8),
+
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(

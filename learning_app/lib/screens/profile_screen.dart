@@ -16,7 +16,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _loading = true;
   String? _error;
 
-  // These will be loaded dynamically
   List<Map<String, String>> certificates = [];
   List<String> badges = [];
 
@@ -34,18 +33,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!mounted) return;
 
-      // Load user profile into provider
       context.read<UserProfile>().loadFromJson(userJson);
 
-      // Certificates from completed courses
       final completedCourses = coursesJson
           .where((c) => c['status'] == 'completed')
           .toList();
+
       certificates = completedCourses
-          .map((c) => {'title': c['title'].toString(), 'date': 'Jan 2024'})
+          .map(
+            (c) => {'title': c['title']?.toString() ?? '', 'date': 'Jan 2024'},
+          )
           .toList();
 
-      // Example badges
       badges = ['7 Day Streak', 'Top Learner', 'Certified', 'Graduate'];
 
       setState(() => _loading = false);
@@ -81,14 +80,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             const SizedBox(height: 24),
 
-            // Page Title
+            /// PAGE TITLE
             const Text(
               'User Profile',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
 
-            // Profile Header
+            /// PROFILE HEADER
             CircleAvatar(
               radius: 48,
               backgroundImage: user.avatarUrl.isNotEmpty
@@ -105,14 +104,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              user.bio.isNotEmpty ? user.bio : '',
+              user.bio,
               style: TextStyle(color: Colors.grey.shade400),
               textAlign: TextAlign.center,
             ),
 
             const SizedBox(height: 12),
 
-            // Edit Profile Button
+            /// EDIT PROFILE
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -125,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 24),
 
-            // Stats
+            /// STATS
             Row(
               children: [
                 _statCard('${user.completedCourses}', 'Courses'),
@@ -136,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 32),
 
-            // Profile Details
+            /// PROFILE DETAILS
             _section('Profile Details'),
             _infoRow('Email', user.email),
             _infoRow('Education', user.education),
@@ -145,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 32),
 
-            // Certificates Section
+            /// CERTIFICATES
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -179,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 32),
 
-            // Badges Section
+            /// BADGES
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -206,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 32),
 
-            // Account Section
+            /// ACCOUNT
             _section('Account'),
             _accountTile(
               context,
@@ -228,16 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'Logout',
               subtitle: '',
               bgColor: Colors.red.shade700,
-              onTap: () {
-                context.read<UserProfile>().clear();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        const PlaceholderScreen(title: 'Logged Out'),
-                  ),
-                );
-              },
+              onTap: () => _showLogoutDialog(context),
             ),
           ],
         ),
@@ -245,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  /// ----------------- UI Helpers -----------------
+  /// ---------------- UI HELPERS ----------------
 
   Widget _statCard(String value, String label) => Expanded(
     child: Card(
@@ -323,4 +313,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: onTap,
     ),
   );
+
+  /// LOGOUT CONFIRMATION
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.read<UserProfile>().clear();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const PlaceholderScreen(title: 'Logged Out'),
+                ),
+              );
+            },
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
 }
