@@ -139,6 +139,9 @@ The application uses a tab-based navigation structure optimized for mobile usabi
 
 Login screen as the primary entry point for users, ensuring it includes form inputs for authentication and basic validation to simulate a secure login process, with navigation to the Dashboard upon successful mock login.
 UI layout with email and password fields, including a 'Remember Me' checkbox and 'Forgot Password' link.
+
+Login screen as the primary entry point for users, ensuring it includes form inputs for authentication and basic validation to simulate a secure login process, with navigation to the Dashboard upon successful mock login.
+UI layout with email and password fields, including a 'Remember Me' checkbox and 'Forgot Password' link.
 Form validation to check for empty fields or invalid formats,
 
 <p align="center">
@@ -163,6 +166,10 @@ Profile screen as a user overview, showing personal info, stats, and links to re
 <p align="center">
   <img alt="P1" src="https://github.com/user-attachments/assets/281018f8-c0cf-4b80-a588-f6b0a9552c83" width="250" />
 </p>
+
+### Profile Page Functionalities:
+
+Edit Profile Button Functionality
 
 ### Profile Page Functionalities:
 
