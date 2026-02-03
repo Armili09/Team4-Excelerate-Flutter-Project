@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -41,7 +42,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Text('johndoe@email.com', style: TextStyle(color: Colors.grey)),
           const SizedBox(height: 24),
 
-          _profileTile(icon: Icons.edit, title: 'Edit Profile', onTap: () {}),
+          _profileTile(
+            icon: Icons.edit,
+            title: 'Edit Profile',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+              );
+            },
+          ),
           _profileTile(icon: Icons.bookmark, title: 'My Courses', onTap: () {}),
           _profileTile(
             icon: Icons.settings,

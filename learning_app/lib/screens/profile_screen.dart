@@ -4,7 +4,7 @@ import '../utils/models/user_profile.dart';
 import '../providers/user_profile_provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/data_service.dart';
-import 'edit_profile_screen.dart';
+import 'profile/edit_profile_screen.dart';
 import 'placeholder_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -162,7 +162,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => EditProfileScreen(profile: user),
+                  ),
                 );
               },
               child: const Text('Edit Profile'),
