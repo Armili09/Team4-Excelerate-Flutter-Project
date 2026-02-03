@@ -53,6 +53,7 @@ class HomeScreen extends StatelessWidget {
               children: mockStats.entries.map((entry) {
                 return Expanded(
                   child: Card(
+                    color: const Color(0xFF11283E),
                     elevation: 2,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -63,10 +64,14 @@ class HomeScreen extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(entry.key),
+                          Text(
+                            entry.key,
+                            style: const TextStyle(color: Colors.white70),
+                          ),
                         ],
                       ),
                     ),
@@ -85,12 +90,21 @@ class HomeScreen extends StatelessWidget {
                   final program = mockPrograms[index];
 
                   return Card(
+                    color: const Color(0xFF11283E),
                     child: ListTile(
-                      title: Text(program['title']),
+                      title: Text(
+                        program['title'],
+                        style: const TextStyle(color: Colors.white),
+                      ),
                       subtitle: Text(
                         '${program['level']} • ${program['duration']}',
+                        style: const TextStyle(color: Colors.white70),
                       ),
-                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: Colors.white70,
+                      ),
                     ),
                   );
                 },

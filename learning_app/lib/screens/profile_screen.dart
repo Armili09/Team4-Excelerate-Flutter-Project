@@ -305,9 +305,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text(
               value,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            Text(label, style: const TextStyle(fontSize: 12)),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
+            ),
           ],
         ),
       ),
@@ -349,11 +356,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _infoCard(BuildContext context, String title, String subtitle) => Card(
     color: const Color(0xFF11283E),
-    child: ListTile(title: Text(title), subtitle: Text(subtitle)),
+    child: ListTile(
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      subtitle: Text(subtitle, style: const TextStyle(color: Colors.white70)),
+    ),
   );
 
-  Widget _badge(String label) =>
-      Chip(backgroundColor: const Color(0xFF11283E), label: Text(label));
+  Widget _badge(String label) => Chip(
+    backgroundColor: const Color(0xFF11283E),
+    label: Text(label, style: const TextStyle(color: Colors.white)),
+  );
 
   Widget _accountTile(
     BuildContext context, {
@@ -366,9 +378,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     color: bgColor ?? const Color(0xFF11283E),
     child: ListTile(
       leading: Icon(icon, color: Colors.white),
-      title: Text(title),
-      subtitle: subtitle.isNotEmpty ? Text(subtitle) : null,
-      trailing: const Icon(Icons.chevron_right),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      subtitle: subtitle.isNotEmpty
+          ? Text(subtitle, style: const TextStyle(color: Colors.white70))
+          : null,
+      trailing: const Icon(Icons.chevron_right, color: Colors.white70),
       onTap: onTap,
     ),
   );

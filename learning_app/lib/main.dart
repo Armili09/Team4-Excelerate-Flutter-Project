@@ -9,11 +9,8 @@ import "screens/my_courses_screen.dart";
 import "screens/profile_screen.dart";
 import "providers/user_profile_provider.dart";
 import "providers/auth_provider.dart";
+import "providers/theme_provider.dart";
 import "utils/models/user_profile.dart";
-
-// Color constants
-const Color backgroundColor = Color(0xFF1A1A2E);
-const Color primaryColor = Color(0xFF4A90E2);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,9 +22,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(
           create: (_) => UserProfileProvider(
             initialProfile: UserProfile(
@@ -51,47 +47,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
-      builder: (context, authProvider, child) {
+    return Consumer2<AuthProvider, ThemeProvider>(
+      builder: (context, authProvider, themeProvider, child) {
         return MaterialApp(
           title: "Excelerate Learning",
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: "Inter",
-            useMaterial3: true,
-            colorScheme: ColorScheme.dark(
-              primary: primaryColor,
-              onPrimary: Colors.white,
-              surface: const Color(0xFF2A3A60),
-              onSurface: Colors.white,
-              secondary: Colors.yellow,
-            ),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color(0xFF1F2A44),
-              centerTitle: true,
-            ),
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Color(0xFF1F2A44),
-              selectedItemColor: Color(0xFF4A90E2),
-              unselectedItemColor: Colors.grey,
-              selectedIconTheme: IconThemeData(size: 24),
-              unselectedIconTheme: IconThemeData(size: 24),
-              selectedLabelStyle: TextStyle(fontSize: 12),
-              unselectedLabelStyle: TextStyle(fontSize: 12),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
+          theme: themeProvider.lightTheme,
+          darkTheme: themeProvider.darkTheme,
+          themeMode: themeProvider.themeMode,
           home: const AppInitializer(),
         );
       },
@@ -119,7 +82,7 @@ class _AppInitializerState extends State<AppInitializer> {
   Future<void> _initializeApp() async {
     // Initialize auth provider in background
     await context.read<AuthProvider>().initialize();
-    
+
     if (mounted) {
       setState(() {
         _isInitialized = true;
@@ -130,24 +93,144 @@ class _AppInitializerState extends State<AppInitializer> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      // Show a loading screen that matches your app theme
       return Scaffold(
-        backgroundColor: const Color(0xFF144bd9), // Match splash screen color
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Your logo or loading indicator
-              Image.asset(
-                "assets/logos/splash.png",
-                width: 120,
-                height: 120,
-              ),
-              const SizedBox(height: 20),
-              const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ],
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                Theme.of(context).colorScheme.surface,
+              ],
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Animated logo with fade-in effect
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 800),
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Transform.scale(
+                        scale: 0.8 + (0.2 * value),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 20,
+                                spreadRadius: 5,
+                              ),
+                            ],
+                          ),
+                          child: Image.asset(
+                            "assets/logos/splash.png",
+                            width: 120,
+                            height: 120,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 30),
+
+                // App name with fade-in animation
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 1000),
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Excelerate',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Learning Platform',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary.withOpacity(0.8),
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 40),
+
+                // Enhanced loading indicator
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 600),
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onPrimary.withOpacity(0.2),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                // Loading text with subtle animation
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 800),
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Text(
+                        'Preparing your learning experience...',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimary.withOpacity(0.7),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       );
