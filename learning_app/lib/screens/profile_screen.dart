@@ -4,8 +4,10 @@ import '../utils/models/user_profile.dart';
 import '../providers/user_profile_provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/data_service.dart';
-import 'edit_profile_screen.dart';
-import 'placeholder_screen.dart';
+import 'profile/edit_profile_screen.dart';
+import 'profile/certificates_screen.dart';
+import 'profile/badges_screen.dart';
+import 'dashboard/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -162,7 +164,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => EditProfileScreen(profile: user),
+                  ),
                 );
               },
               child: const Text('Edit Profile'),
@@ -203,8 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            const PlaceholderScreen(title: 'Certificates'),
+                        builder: (_) => const CertificatesScreen(),
                       ),
                     );
                   },
@@ -236,10 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const PlaceholderScreen(title: 'Badges'),
-                      ),
+                      MaterialPageRoute(builder: (_) => const BadgesScreen()),
                     );
                   },
                   child: const Text('View All'),
@@ -261,9 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const PlaceholderScreen(title: 'Settings'),
-                  ),
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
                 );
               },
             ),
@@ -307,9 +305,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text(
               value,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            Text(label, style: const TextStyle(fontSize: 12)),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
+            ),
           ],
         ),
       ),
@@ -351,11 +356,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _infoCard(BuildContext context, String title, String subtitle) => Card(
     color: const Color(0xFF11283E),
-    child: ListTile(title: Text(title), subtitle: Text(subtitle)),
+    child: ListTile(
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      subtitle: Text(subtitle, style: const TextStyle(color: Colors.white70)),
+    ),
   );
 
-  Widget _badge(String label) =>
-      Chip(backgroundColor: const Color(0xFF11283E), label: Text(label));
+  Widget _badge(String label) => Chip(
+    backgroundColor: const Color(0xFF11283E),
+    label: Text(label, style: const TextStyle(color: Colors.white)),
+  );
 
   Widget _accountTile(
     BuildContext context, {
@@ -368,9 +378,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     color: bgColor ?? const Color(0xFF11283E),
     child: ListTile(
       leading: Icon(icon, color: Colors.white),
-      title: Text(title),
-      subtitle: subtitle.isNotEmpty ? Text(subtitle) : null,
-      trailing: const Icon(Icons.chevron_right),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      subtitle: subtitle.isNotEmpty
+          ? Text(subtitle, style: const TextStyle(color: Colors.white70))
+          : null,
+      trailing: const Icon(Icons.chevron_right, color: Colors.white70),
       onTap: onTap,
     ),
   );

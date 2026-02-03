@@ -157,6 +157,7 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
     }
 
     return Card(
+      color: const Color(0xFF2A3A60), // Dull blue color
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -185,6 +186,7 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -216,14 +218,14 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
                 child: LinearProgressIndicator(
                   value: course.progress,
                   minHeight: 8,
-                  backgroundColor: Colors.grey.shade800,
+                  backgroundColor: Colors.grey.shade600,
                   valueColor: AlwaysStoppedAnimation(statusColor),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 '${(course.progress * 100).round()}% completed',
-                style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
               const SizedBox(height: 8),
 
@@ -233,29 +235,13 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
                 children: [
                   Text(
                     'Start: ${course.startDate}',
-                    style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                   Text(
                     'End: ${course.endDate}',
-                    style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CourseDetailScreen(course: course),
-                      ),
-                    );
-                  },
-                  child: const Text('View Details'),
-                ),
               ),
             ],
           ),

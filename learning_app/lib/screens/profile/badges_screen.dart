@@ -162,7 +162,7 @@ class _BadgesScreenState extends State<BadgesScreen>
           style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(140),
           child: Column(
             children: [
               // Stats Card
