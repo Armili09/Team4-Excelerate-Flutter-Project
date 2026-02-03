@@ -5,7 +5,9 @@ import '../providers/user_profile_provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/data_service.dart';
 import 'profile/edit_profile_screen.dart';
-import 'placeholder_screen.dart';
+import 'profile/certificates_screen.dart';
+import 'profile/badges_screen.dart';
+import 'dashboard/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -205,8 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            const PlaceholderScreen(title: 'Certificates'),
+                        builder: (_) => const CertificatesScreen(),
                       ),
                     );
                   },
@@ -238,10 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const PlaceholderScreen(title: 'Badges'),
-                      ),
+                      MaterialPageRoute(builder: (_) => const BadgesScreen()),
                     );
                   },
                   child: const Text('View All'),
@@ -263,9 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const PlaceholderScreen(title: 'Settings'),
-                  ),
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
                 );
               },
             ),
